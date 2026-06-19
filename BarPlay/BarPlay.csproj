@@ -29,6 +29,7 @@
 		<AppxBundle>Always</AppxBundle>
 		<AppxBundlePlatforms>x86|x64|arm64</AppxBundlePlatforms>
 		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+		<ApplicationIcon>Assets\Icon.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
