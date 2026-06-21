@@ -31,6 +31,73 @@
             <Setter Property="Height" Value="36" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
+        <Style x:Key="ArtworkButtonStyle" TargetType="Button">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter
+                            x:Name="ContentPresenter"
+                            Padding="{TemplateBinding Padding}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            ContentTransitions="{TemplateBinding ContentTransitions}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="ContentPresenter"
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="1"
+                                                Duration="0:0:0.12" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="ContentPresenter"
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="0.7"
+                                                Duration="0:0:0.12" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="ContentPresenter"
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="0.7"
+                                                Duration="0:0:0.06" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="ContentPresenter"
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="0.45"
+                                                Duration="0:0:0.12" />
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </ContentPresenter>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
     <Button
@@ -89,21 +156,29 @@
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Border
+                                <Button
+                                    x:Uid="OpenSourceAppArtworkButton"
                                     Grid.Column="0"
                                     Width="72"
                                     Height="72"
                                     HorizontalAlignment="Left"
-                                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                    CornerRadius="8">
-                                    <Grid>
-                                        <FontIcon
-                                            FontSize="32"
-                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                            Glyph="&#xE93C;" />
-                                        <Image Source="{x:Bind ViewModel.Thumbnail, Mode=OneWay}" Stretch="UniformToFill" />
-                                    </Grid>
-                                </Border>
+                                    Command="{x:Bind ViewModel.OpenSourceAppCommand}"
+                                    Style="{StaticResource ArtworkButtonStyle}">
+                                    <Border
+                                        Width="72"
+                                        Height="72"
+                                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                        CornerRadius="8">
+                                        <Grid>
+                                            <FontIcon
+                                                FontSize="32"
+                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                Glyph="&#xE93C;"
+                                                Visibility="{x:Bind ViewModel.HasNoSession, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                            <Image Source="{x:Bind ViewModel.Thumbnail, Mode=OneWay}" Stretch="UniformToFill" />
+                                        </Grid>
+                                    </Border>
+                                </Button>
                                 <StackPanel
                                     Grid.Column="1"
                                     VerticalAlignment="Bottom"
@@ -240,20 +315,29 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <!--  Thumbnail  -->
-                <Border
+                <Button
+                    x:Uid="OpenSourceAppArtworkButton"
                     Grid.Column="0"
                     Width="36"
                     Height="36"
-                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                    CornerRadius="4">
-                    <Grid>
-                        <FontIcon
-                            FontSize="18"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            Glyph="&#xE93C;" />
-                        <Image Source="{x:Bind ViewModel.Thumbnail, Mode=OneWay}" Stretch="UniformToFill" />
-                    </Grid>
-                </Border>
+                    Command="{x:Bind ViewModel.OpenSourceAppCommand}"
+                    IsEnabled="{x:Bind ViewModel.HasSession, Mode=OneWay}"
+                    Style="{StaticResource ArtworkButtonStyle}">
+                    <Border
+                        Width="36"
+                        Height="36"
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        CornerRadius="4">
+                        <Grid>
+                            <FontIcon
+                                FontSize="18"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Glyph="&#xE93C;"
+                                Visibility="{x:Bind ViewModel.HasNoSession, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            <Image Source="{x:Bind ViewModel.Thumbnail, Mode=OneWay}" Stretch="UniformToFill" />
+                        </Grid>
+                    </Border>
+                </Button>
 
                 <!--  Text  -->
                 <StackPanel

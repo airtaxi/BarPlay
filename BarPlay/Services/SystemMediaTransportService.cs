@@ -1,4 +1,5 @@
-﻿using BarPlay.Models;
+using BarPlay.Models;
+using System.Diagnostics;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
@@ -61,6 +62,25 @@ public sealed partial class SystemMediaTransportService : ISystemMediaTransportS
     {
         if (_currentSession is null) return false;
         return await _currentSession.TryChangePlaybackPositionAsync(positionTicks);
+    }
+
+    public Task<bool> OpenSourceAppAsync()
+    {
+        var sourceAppUserModelId = _currentSession?.SourceAppUserModelId;
+        if (string.IsNullOrWhiteSpace(sourceAppUserModelId)) return Task.FromResult(false);
+
+        try
+        {
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = $@"shell:AppsFolder\{sourceAppUserModelId}",
+                UseShellExecute = true
+            };
+
+            Process.Start(processStartInfo);
+            return Task.FromResult(true);
+        }
+        catch { return Task.FromResult(false); }
     }
 
     public void Dispose()

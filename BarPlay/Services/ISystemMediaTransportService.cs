@@ -15,4 +15,6 @@ public interface ISystemMediaTransportService : IDisposable
     Task<bool> TogglePlayPauseAsync();
 
     Task<bool> SeekAsync(long positionTicks);
+
+    Task<bool> OpenSourceAppAsync();
 }

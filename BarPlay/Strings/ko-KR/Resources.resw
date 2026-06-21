@@ -76,6 +76,9 @@
   <data name="NoMediaText.Text" xml:space="preserve">
     <value>재생 중인 미디어가 없습니다</value>
   </data>
+  <data name="OpenSourceAppArtworkButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>미디어 앱 열기</value>
+  </data>
   <data name="PlayPauseButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>재생/일시정지</value>
   </data>

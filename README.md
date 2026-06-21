@@ -13,6 +13,7 @@ It seamlessly integrates as a deskband, allowing you to view the currently playi
 
 - Seamlessly integrates into the Windows 11 taskbar as a deskband widget
 - Displays current playing media thumbnail, title, and description at a glance
+- Click the artwork to jump directly to the currently playing app
 - Provides quick access to Previous, Play/Pause, and Next transport controls
 - Interactive seek slider inside an expanded flyout menu
 - Works universally with any app supporting Windows System Media Transport Controls (Spotify, Web Browsers, YouTube, etc.)

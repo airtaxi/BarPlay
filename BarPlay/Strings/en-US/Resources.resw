@@ -76,6 +76,9 @@
   <data name="NoMediaText.Text" xml:space="preserve">
     <value>No media is playing</value>
   </data>
+  <data name="OpenSourceAppArtworkButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Open media app</value>
+  </data>
   <data name="PlayPauseButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Play/Pause</value>
   </data>

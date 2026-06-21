@@ -105,6 +105,9 @@ public sealed partial class MediaPlaybackViewModel : ObservableObject, IDisposab
     }
 
     [RelayCommand]
+    private async Task OpenSourceAppAsync() => await _service.OpenSourceAppAsync();
+
+    [RelayCommand]
     private async Task ToggleAutoStartAsync(ToggleMenuFlyoutItem item) => item.IsChecked = await StartupTaskService.SetEnabledAsync(item.IsChecked);
 
     [RelayCommand]
