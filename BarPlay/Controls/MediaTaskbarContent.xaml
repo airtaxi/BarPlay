@@ -62,162 +62,167 @@
                     </Style>
                 </Flyout.FlyoutPresenterStyle>
 
-                <StackPanel
-                    Width="400"
-                    KeyboardAcceleratorPlacementMode="Hidden"
-                    Spacing="12">
-                    <StackPanel.KeyboardAccelerators>
-                        <KeyboardAccelerator Key="Space" Invoked="OnFlyoutSpaceKeyboardAcceleratorInvoked" />
-                    </StackPanel.KeyboardAccelerators>
-                    <!--  No session state  -->
-                    <TextBlock
-                        x:Uid="NoMediaText"
-                        HorizontalAlignment="Center"
-                        FontSize="13"
-                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                        Visibility="{x:Bind ViewModel.HasNoSession, Mode=OneWay}" />
+                <Grid>
+                    <StackPanel
+                        Width="400"
+                        VerticalAlignment="Center"
+                        KeyboardAcceleratorPlacementMode="Hidden"
+                        Spacing="12">
+                        <StackPanel.KeyboardAccelerators>
+                            <KeyboardAccelerator Key="Space" Invoked="OnFlyoutSpaceKeyboardAcceleratorInvoked" />
+                        </StackPanel.KeyboardAccelerators>
+                        <!--  No session state  -->
+                        <TextBlock
+                            x:Uid="NoMediaText"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="13"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            TextLineBounds="Tight"
+                            Visibility="{x:Bind ViewModel.HasNoSession, Mode=OneWay}" />
 
-                    <!--  Normal state  -->
-                    <StackPanel Spacing="12" Visibility="{x:Bind ViewModel.HasSession, Mode=OneWay}">
-                        <!--  Album art + Title + Artist  -->
-                        <Grid ColumnSpacing="8">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Border
-                                Grid.Column="0"
-                                Width="72"
-                                Height="72"
-                                HorizontalAlignment="Left"
-                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                CornerRadius="8">
-                                <Grid>
-                                    <FontIcon
-                                        FontSize="32"
+                        <!--  Normal state  -->
+                        <StackPanel Spacing="12" Visibility="{x:Bind ViewModel.HasSession, Mode=OneWay}">
+                            <!--  Album art + Title + Artist  -->
+                            <Grid ColumnSpacing="8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Border
+                                    Grid.Column="0"
+                                    Width="72"
+                                    Height="72"
+                                    HorizontalAlignment="Left"
+                                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                    CornerRadius="8">
+                                    <Grid>
+                                        <FontIcon
+                                            FontSize="32"
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Glyph="&#xE93C;" />
+                                        <Image Source="{x:Bind ViewModel.Thumbnail, Mode=OneWay}" Stretch="UniformToFill" />
+                                    </Grid>
+                                </Border>
+                                <StackPanel
+                                    Grid.Column="1"
+                                    VerticalAlignment="Bottom"
+                                    Spacing="2">
+                                    <TextBlock
+                                        FontSize="18"
+                                        FontWeight="SemiBold"
+                                        Text="{x:Bind ViewModel.Title, Mode=OneWay}"
+                                        TextTrimming="CharacterEllipsis" />
+                                    <TextBlock
+                                        FontSize="12"
                                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                        Glyph="&#xE93C;" />
-                                    <Image Source="{x:Bind ViewModel.Thumbnail, Mode=OneWay}" Stretch="UniformToFill" />
-                                </Grid>
-                            </Border>
-                            <StackPanel
-                                Grid.Column="1"
-                                VerticalAlignment="Bottom"
-                                Spacing="2">
+                                        Text="{x:Bind ViewModel.Description, Mode=OneWay}"
+                                        TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+                            </Grid>
+
+
+                            <!--  Seek slider  -->
+                            <Slider
+                                ManipulationCompleted="OnSliderManipulationCompleted"
+                                ManipulationMode="All"
+                                ManipulationStarted="OnSliderManipulationStarted"
+                                Maximum="{x:Bind ViewModel.EndTimeTicks, Mode=OneWay}"
+                                Minimum="0"
+                                StepFrequency="10000000"
+                                Visibility="{x:Bind ViewModel.HasTimeline, Mode=OneWay}"
+                                Value="{x:Bind ViewModel.PositionTicks, Mode=TwoWay}">
+                                <Slider.ThumbToolTipValueConverter>
+                                    <converters:SeekSliderThumbToolTipConverter />
+                                </Slider.ThumbToolTipValueConverter>
+                            </Slider>
+
+                            <!--  Time labels  -->
+                            <Grid Margin="0,-12,0,0" Visibility="{x:Bind ViewModel.HasTimeline, Mode=OneWay}">
                                 <TextBlock
-                                    FontSize="18"
-                                    FontWeight="SemiBold"
-                                    Text="{x:Bind ViewModel.Title, Mode=OneWay}"
-                                    TextTrimming="CharacterEllipsis" />
-                                <TextBlock
+                                    HorizontalAlignment="Left"
                                     FontSize="12"
                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                    Text="{x:Bind ViewModel.Description, Mode=OneWay}"
-                                    TextTrimming="CharacterEllipsis" />
+                                    Text="{x:Bind ViewModel.PositionText, Mode=OneWay}"
+                                    TextLineBounds="Tight" />
+                                <TextBlock
+                                    HorizontalAlignment="Right"
+                                    FontSize="12"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Text="{x:Bind ViewModel.EndTimeText, Mode=OneWay}"
+                                    TextLineBounds="Tight" />
+                            </Grid>
+
+                            <!--  Transport buttons  -->
+                            <StackPanel
+                                Margin="0,-24,0,0"
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal"
+                                Spacing="4">
+
+                                <!--  Previous  -->
+                                <Button
+                                    x:Uid="PreviousButton"
+                                    Command="{x:Bind ViewModel.SkipPreviousCommand}"
+                                    IsEnabled="{x:Bind ViewModel.CanSkipPrevious, Mode=OneWay}"
+                                    Style="{StaticResource FlyoutTransportButtonStyle}">
+                                    <FontIcon FontSize="20" Glyph="&#xE76B;" />
+                                </Button>
+
+                                <!--  Play / Pause  -->
+                                <Button
+                                    x:Name="FlyoutPlayPauseButton"
+                                    x:Uid="PlayPauseButton"
+                                    Command="{x:Bind ViewModel.TogglePlayPauseCommand}"
+                                    IsEnabled="{x:Bind ViewModel.CanPlayPause, Mode=OneWay}"
+                                    Style="{StaticResource FlyoutTransportButtonStyle}">
+                                    <Grid>
+                                        <FontIcon
+                                            FontSize="20"
+                                            Glyph="&#xE768;"
+                                            Visibility="{x:Bind ViewModel.IsNotPlaying, Mode=OneWay}" />
+                                        <FontIcon
+                                            FontSize="20"
+                                            Glyph="&#xE769;"
+                                            Visibility="{x:Bind ViewModel.IsPlaying, Mode=OneWay}" />
+                                    </Grid>
+                                </Button>
+
+                                <!--  Next  -->
+                                <Button
+                                    x:Uid="NextButton"
+                                    Command="{x:Bind ViewModel.SkipNextCommand}"
+                                    IsEnabled="{x:Bind ViewModel.CanSkipNext, Mode=OneWay}"
+                                    Style="{StaticResource FlyoutTransportButtonStyle}">
+                                    <FontIcon FontSize="20" Glyph="&#xE76C;" />
+                                </Button>
                             </StackPanel>
-
-                            <!--  Settings Button  -->
-                            <Button
-                                Grid.Column="1"
-                                Width="28"
-                                Height="28"
-                                Padding="0"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Top"
-                                Background="Transparent"
-                                BorderBrush="Transparent">
-                                <Button.Flyout>
-                                    <MenuFlyout Placement="BottomEdgeAlignedLeft">
-                                        <ToggleMenuFlyoutItem
-                                            x:Name="AutoStartToggleMenuFlyoutItem"
-                                            x:Uid="AutoStartToggleMenuFlyoutItem"
-                                            Command="{x:Bind ViewModel.ToggleAutoStartCommand}"
-                                            CommandParameter="{x:Bind AutoStartToggleMenuFlyoutItem}" />
-                                        <MenuFlyoutSeparator />
-                                        <MenuFlyoutItem x:Uid="ExitMenuItem" Command="{x:Bind ViewModel.ExitCommand}" />
-                                    </MenuFlyout>
-                                </Button.Flyout>
-                                <FontIcon FontSize="16" Glyph="&#xE713;" />
-                            </Button>
-                        </Grid>
-
-                        <!--  Seek slider  -->
-                        <Slider
-                            ManipulationCompleted="OnSliderManipulationCompleted"
-                            ManipulationMode="All"
-                            ManipulationStarted="OnSliderManipulationStarted"
-                            Maximum="{x:Bind ViewModel.EndTimeTicks, Mode=OneWay}"
-                            Minimum="0"
-                            StepFrequency="10000000"
-                            Visibility="{x:Bind ViewModel.HasTimeline, Mode=OneWay}"
-                            Value="{x:Bind ViewModel.PositionTicks, Mode=TwoWay}">
-                            <Slider.ThumbToolTipValueConverter>
-                                <converters:SeekSliderThumbToolTipConverter />
-                            </Slider.ThumbToolTipValueConverter>
-                        </Slider>
-
-                        <!--  Time labels  -->
-                        <Grid Margin="0,-12,0,0" Visibility="{x:Bind ViewModel.HasTimeline, Mode=OneWay}">
-                            <TextBlock
-                                HorizontalAlignment="Left"
-                                FontSize="12"
-                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                Text="{x:Bind ViewModel.PositionText, Mode=OneWay}"
-                                TextLineBounds="Tight" />
-                            <TextBlock
-                                HorizontalAlignment="Right"
-                                FontSize="12"
-                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                Text="{x:Bind ViewModel.EndTimeText, Mode=OneWay}"
-                                TextLineBounds="Tight" />
-                        </Grid>
-
-                        <!--  Transport buttons  -->
-                        <StackPanel
-                            Margin="0,-24,0,0"
-                            HorizontalAlignment="Center"
-                            Orientation="Horizontal"
-                            Spacing="4">
-
-                            <!--  Previous  -->
-                            <Button
-                                x:Uid="PreviousButton"
-                                Command="{x:Bind ViewModel.SkipPreviousCommand}"
-                                IsEnabled="{x:Bind ViewModel.CanSkipPrevious, Mode=OneWay}"
-                                Style="{StaticResource FlyoutTransportButtonStyle}">
-                                <FontIcon FontSize="20" Glyph="&#xE76B;" />
-                            </Button>
-
-                            <!--  Play / Pause  -->
-                            <Button
-                                x:Name="FlyoutPlayPauseButton"
-                                x:Uid="PlayPauseButton"
-                                Command="{x:Bind ViewModel.TogglePlayPauseCommand}"
-                                IsEnabled="{x:Bind ViewModel.CanPlayPause, Mode=OneWay}"
-                                Style="{StaticResource FlyoutTransportButtonStyle}">
-                                <Grid>
-                                    <FontIcon
-                                        FontSize="20"
-                                        Glyph="&#xE768;"
-                                        Visibility="{x:Bind ViewModel.IsNotPlaying, Mode=OneWay}" />
-                                    <FontIcon
-                                        FontSize="20"
-                                        Glyph="&#xE769;"
-                                        Visibility="{x:Bind ViewModel.IsPlaying, Mode=OneWay}" />
-                                </Grid>
-                            </Button>
-
-                            <!--  Next  -->
-                            <Button
-                                x:Uid="NextButton"
-                                Command="{x:Bind ViewModel.SkipNextCommand}"
-                                IsEnabled="{x:Bind ViewModel.CanSkipNext, Mode=OneWay}"
-                                Style="{StaticResource FlyoutTransportButtonStyle}">
-                                <FontIcon FontSize="20" Glyph="&#xE76C;" />
-                            </Button>
                         </StackPanel>
                     </StackPanel>
-                </StackPanel>
+
+                    <!--  Settings Button  -->
+                    <Button
+                        Width="28"
+                        Height="28"
+                        Padding="0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Background="Transparent"
+                        BorderBrush="Transparent">
+                        <Button.Flyout>
+                            <MenuFlyout Placement="BottomEdgeAlignedLeft">
+                                <ToggleMenuFlyoutItem
+                                    x:Name="AutoStartToggleMenuFlyoutItem"
+                                    x:Uid="AutoStartToggleMenuFlyoutItem"
+                                    Command="{x:Bind ViewModel.ToggleAutoStartCommand}"
+                                    CommandParameter="{x:Bind AutoStartToggleMenuFlyoutItem}" />
+                                <MenuFlyoutSeparator />
+                                <MenuFlyoutItem x:Uid="ExitMenuItem" Command="{x:Bind ViewModel.ExitCommand}" />
+                            </MenuFlyout>
+                        </Button.Flyout>
+                        <FontIcon FontSize="16" Glyph="&#xE713;" />
+                    </Button>
+                </Grid>
             </Flyout>
         </Button.Flyout>
 
