@@ -4,7 +4,7 @@ namespace BarPlay.Services;
 
 public sealed class StartupTaskService : IStartupTaskService
 {
-    private const string TaskId = "BarPlayStartup";
+    private const string TaskId = "BarPlayStartupTask";
 
     public async Task<bool> IsEnabledAsync()
     {

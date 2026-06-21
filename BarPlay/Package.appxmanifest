@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap7="http://schemas.microsoft.com/appx/manifest/uap/windows10/7" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" IgnorableNamespaces="uap uap7 rescap desktop mp">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5" xmlns:uap7="http://schemas.microsoft.com/appx/manifest/uap/windows10/7" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" IgnorableNamespaces="uap uap5 uap7 rescap mp">
   <Identity Name="49536HowonLee.BarPlay" Publisher="CN=7713B07B-6F8A-4FB4-877B-2FA9AF531D39" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="a1b2c3d4-e5f6-7890-abcd-ef1234567890" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
@@ -22,9 +22,9 @@
         <uap:LockScreen Notification="badge" BadgeLogo="Assets\LockScreenLogo.scale-200.png" />
       </uap:VisualElements>
       <Extensions>
-        <desktop:Extension Category="windows.startupTask" Executable="$targetnametoken$.exe" EntryPoint="Windows.FullTrustApplication">
-          <desktop:StartupTask TaskId="BarPlayStartup" Enabled="true" DisplayName="BarPlay" />
-        </desktop:Extension>
+        <uap5:Extension Category="windows.startupTask" Executable="BarPlay.exe" EntryPoint="Windows.FullTrustApplication">
+          <uap5:StartupTask TaskId="BarPlayStartupTask" Enabled="true" DisplayName="BarPlay" />
+        </uap5:Extension>
       </Extensions>
     </Application>
   </Applications>
