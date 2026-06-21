@@ -124,12 +124,14 @@
 
                             <!--  Seek slider  -->
                             <Slider
-                                ManipulationCompleted="OnSliderManipulationCompleted"
+                                x:Name="SeekSlider"
+                                ManipulationCompleted="OnSeekSliderManipulationCompleted"
                                 ManipulationMode="All"
-                                ManipulationStarted="OnSliderManipulationStarted"
+                                ManipulationStarted="OnSeekSliderManipulationStarted"
                                 Maximum="{x:Bind ViewModel.EndTimeTicks, Mode=OneWay}"
                                 Minimum="0"
                                 StepFrequency="10000000"
+                                ValueChanged="OnSeekSliderValueChanged"
                                 Visibility="{x:Bind ViewModel.HasTimeline, Mode=OneWay}"
                                 Value="{x:Bind ViewModel.PositionTicks, Mode=TwoWay}">
                                 <Slider.ThumbToolTipValueConverter>

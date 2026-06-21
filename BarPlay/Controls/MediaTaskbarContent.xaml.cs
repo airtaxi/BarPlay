@@ -4,6 +4,7 @@ using CommunityToolkit.WinUI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
 
 namespace BarPlay.Controls;
@@ -25,8 +26,9 @@ public sealed partial class MediaTaskbarContent : UserControl
         AutoStartToggleMenuFlyoutItem.IsChecked = await ViewModel.StartupTaskService.IsEnabledAsync();
     }
 
-    private void OnSliderManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e) => ViewModel.BeginSeek();
-    private async void OnSliderManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e) => await ViewModel.EndSeekAsync((long)((Slider)sender).Value);
+    private void OnSeekSliderManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e) => ViewModel.BeginSeek();
+    private async void OnSeekSliderManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e) => await ViewModel.EndSeekAsync((long)((Slider)sender).Value);
+    private async void OnSeekSliderValueChanged(object sender, RangeBaseValueChangedEventArgs e) => await ViewModel.SeekFromPositionChangeAsync(e.OldValue, e.NewValue);
 
     private void OnFlyoutSpaceKeyboardAcceleratorInvoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args) => ViewModel.TogglePlayPauseCommand.Execute(null);
     private void OnFlyoutOpened(object sender, object e) => FlyoutPlayPauseButton.Focus(FocusState.Keyboard);

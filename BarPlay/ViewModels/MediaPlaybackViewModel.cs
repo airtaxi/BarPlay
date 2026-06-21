@@ -9,9 +9,12 @@ namespace BarPlay.ViewModels;
 
 public sealed partial class MediaPlaybackViewModel : ObservableObject, IDisposable
 {
+    private static readonly double s_immediateSeekThresholdTicks = TimeSpan.FromSeconds(2).Ticks;
+
     public IStartupTaskService StartupTaskService { get; }
     private readonly ISystemMediaTransportService _service;
     private bool _isUserSeeking;
+    private bool _isApplyingSnapshotPosition;
     private bool _isDisposed;
     private bool _hasOptimisticToggle;
 
@@ -72,10 +75,17 @@ public sealed partial class MediaPlaybackViewModel : ObservableObject, IDisposab
 
     public void BeginSeek() => _isUserSeeking = true;
 
-    public async Task EndSeekAsync(long positionTicks)
+    public async Task EndSeekAsync(long positionTicks) => await SeekAsync(positionTicks);
+
+    public async Task SeekFromPositionChangeAsync(double oldPositionTicks, double newPositionTicks)
     {
-        _isUserSeeking = false;
-        await _service.SeekAsync(positionTicks);
+        if (_isApplyingSnapshotPosition) return;
+        if (_isUserSeeking) return;
+        if (!HasTimeline) return;
+        if (!double.IsFinite(oldPositionTicks) || !double.IsFinite(newPositionTicks)) return;
+        if (Math.Abs(newPositionTicks - oldPositionTicks) < s_immediateSeekThresholdTicks) return;
+
+        await SeekAsync((long)newPositionTicks);
     }
 
     [RelayCommand]
@@ -100,7 +110,6 @@ public sealed partial class MediaPlaybackViewModel : ObservableObject, IDisposab
     [RelayCommand]
     private void Exit() => Environment.Exit(0);
 
-
     private void OnStateChanged(MediaPlaybackSnapshot snapshot)
     {
         Title = snapshot.Title;
@@ -115,17 +124,28 @@ public sealed partial class MediaPlaybackViewModel : ObservableObject, IDisposab
                 _hasOptimisticToggle = false;
             }
         }
-        else
-        {
-            IsPlaying = snapshot.IsPlaying;
-        }
+        else IsPlaying = snapshot.IsPlaying;
 
         CanSkipPrevious = snapshot.CanSkipPrevious;
         CanSkipNext = snapshot.CanSkipNext;
         CanPlayPause = snapshot.CanPlayPause;
         HasTimeline = snapshot.HasTimeline;
         EndTimeTicks = snapshot.EndTimeTicks;
-        if (!_isUserSeeking) PositionTicks = snapshot.PositionTicks;
+        if (!_isUserSeeking) ApplySnapshotPosition(snapshot.PositionTicks);
+    }
+
+    private async Task SeekAsync(long positionTicks)
+    {
+        _isUserSeeking = true;
+        try { await _service.SeekAsync(positionTicks); }
+        finally { _isUserSeeking = false; }
+    }
+
+    private void ApplySnapshotPosition(long positionTicks)
+    {
+        _isApplyingSnapshotPosition = true;
+        try { PositionTicks = positionTicks; }
+        finally { _isApplyingSnapshotPosition = false; }
     }
 
     public void Dispose()
