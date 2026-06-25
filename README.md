@@ -24,7 +24,7 @@ It seamlessly integrates as a deskband, allowing you to view the currently playi
 ## Libraries Used
 
 - [Microsoft.WindowsAppSDK](https://github.com/microsoft/WindowsAppSDK) - WinUI 3 app platform and Windows integration
-- [Deskband11Lib](https://github.com/StartIsBack/Deskband11Lib) - Windows 11 taskbar widget integration
+- [Deskband11Lib](https://github.com/airtaxi/Deskband11Lib) - Windows 11 taskbar widget integration
 - [CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet) - MVVM architecture and source generators
 - [Microsoft.Extensions.DependencyInjection](https://github.com/dotnet/runtime) - Dependency injection container
 
