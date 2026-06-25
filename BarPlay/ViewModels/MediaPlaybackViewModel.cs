@@ -133,8 +133,14 @@ public sealed partial class MediaPlaybackViewModel : ObservableObject, IDisposab
         CanSkipNext = snapshot.CanSkipNext;
         CanPlayPause = snapshot.CanPlayPause;
         HasTimeline = snapshot.HasTimeline;
-        EndTimeTicks = snapshot.EndTimeTicks;
-        if (!_isUserSeeking) ApplySnapshotPosition(snapshot.PositionTicks);
+
+        _isApplyingSnapshotPosition = true;
+        try
+        {
+            EndTimeTicks = snapshot.EndTimeTicks;
+            if (!_isUserSeeking) PositionTicks = snapshot.PositionTicks;
+        }
+        finally { _isApplyingSnapshotPosition = false; }
     }
 
     private async Task SeekAsync(long positionTicks)
@@ -142,13 +148,6 @@ public sealed partial class MediaPlaybackViewModel : ObservableObject, IDisposab
         _isUserSeeking = true;
         try { await _service.SeekAsync(positionTicks); }
         finally { _isUserSeeking = false; }
-    }
-
-    private void ApplySnapshotPosition(long positionTicks)
-    {
-        _isApplyingSnapshotPosition = true;
-        try { PositionTicks = positionTicks; }
-        finally { _isApplyingSnapshotPosition = false; }
     }
 
     public void Dispose()
