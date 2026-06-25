@@ -1,4 +1,4 @@
-using BarPlay.Services;
+﻿using BarPlay.Services;
 using BarPlay.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Dispatching;
@@ -17,6 +17,7 @@ public partial class App : Application
     protected override async void OnLaunched(LaunchActivatedEventArgs args)
     {
         Services = ConfigureServices();
+        await Task.Delay(1000);
         await InitializeMainWindowAsync();
     }
 
