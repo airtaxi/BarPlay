@@ -64,6 +64,9 @@
   <data name="ExitMenuItem.Text" xml:space="preserve">
     <value>結束程式</value>
   </data>
+  <data name="FocusPlayPauseButtonOnFlyoutOpenToggleMenuFlyoutItem.Text" xml:space="preserve">
+    <value>開啟面板時聚焦播放/暫停按鈕</value>
+  </data>
   <data name="MediaInfoButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>媒體資訊</value>
   </data>

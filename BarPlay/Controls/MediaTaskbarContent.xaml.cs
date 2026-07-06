@@ -1,4 +1,4 @@
-﻿using BarPlay.Services;
+using BarPlay.Services;
 using BarPlay.ViewModels;
 using CommunityToolkit.WinUI;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,5 +31,11 @@ public sealed partial class MediaTaskbarContent : UserControl
     private async void OnSeekSliderValueChanged(object sender, RangeBaseValueChangedEventArgs e) => await ViewModel.SeekFromPositionChangeAsync(e.OldValue, e.NewValue);
 
     private void OnFlyoutSpaceKeyboardAcceleratorInvoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args) => ViewModel.TogglePlayPauseCommand.Execute(null);
-    private void OnFlyoutOpened(object sender, object e) => FlyoutPlayPauseButton.Focus(FocusState.Keyboard);
+    private void OnFlyoutOpened(object sender, object e)
+    {
+        if (ViewModel.FocusPlayPauseButtonOnFlyoutOpen)
+        {
+            FlyoutPlayPauseButton.Focus(FocusState.Keyboard);
+        }
+    }
 }

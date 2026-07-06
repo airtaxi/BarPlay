@@ -293,6 +293,10 @@
                                     x:Uid="AutoStartToggleMenuFlyoutItem"
                                     Command="{x:Bind ViewModel.ToggleAutoStartCommand}"
                                     CommandParameter="{x:Bind AutoStartToggleMenuFlyoutItem}" />
+                                <ToggleMenuFlyoutItem
+                                    x:Name="FocusPlayPauseButtonOnFlyoutOpenToggleMenuFlyoutItem"
+                                    x:Uid="FocusPlayPauseButtonOnFlyoutOpenToggleMenuFlyoutItem"
+                                    IsChecked="{x:Bind ViewModel.FocusPlayPauseButtonOnFlyoutOpen, Mode=TwoWay}" />
                                 <MenuFlyoutSeparator />
                                 <MenuFlyoutItem x:Uid="ExitMenuItem" Command="{x:Bind ViewModel.ExitCommand}" />
                             </MenuFlyout>

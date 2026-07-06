@@ -64,6 +64,9 @@
   <data name="ExitMenuItem.Text" xml:space="preserve">
     <value>프로그램 종료</value>
   </data>
+  <data name="FocusPlayPauseButtonOnFlyoutOpenToggleMenuFlyoutItem.Text" xml:space="preserve">
+    <value>패널 열 때 재생/일시정지 버튼 포커스</value>
+  </data>
   <data name="MediaInfoButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>미디어 정보</value>
   </data>

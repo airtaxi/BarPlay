@@ -26,6 +26,7 @@ public partial class App : Application
         var services = new ServiceCollection();
 
         services.AddSingleton<ILocalizationService, LocalizationService>();
+        services.AddSingleton<ISettingsService, SettingsService>();
         services.AddSingleton<ISystemMediaTransportService>(serviceProvider => new SystemMediaTransportService(DispatcherQueue.GetForCurrentThread()!));
         services.AddSingleton<IStartupTaskService, StartupTaskService>();
         services.AddSingleton<MediaPlaybackViewModel>();

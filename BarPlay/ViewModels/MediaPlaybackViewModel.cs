@@ -12,15 +12,17 @@ public sealed partial class MediaPlaybackViewModel : ObservableObject, IDisposab
     private static readonly double s_immediateSeekThresholdTicks = TimeSpan.FromSeconds(2).Ticks;
 
     public IStartupTaskService StartupTaskService { get; }
+    private readonly ISettingsService _settingsService;
     private readonly ISystemMediaTransportService _service;
     private bool _isUserSeeking;
     private bool _isApplyingSnapshotPosition;
     private bool _isDisposed;
     private bool _hasOptimisticToggle;
 
-    public MediaPlaybackViewModel(ISystemMediaTransportService service, IStartupTaskService startupTaskService)
+    public MediaPlaybackViewModel(ISystemMediaTransportService service, IStartupTaskService startupTaskService, ISettingsService settingsService)
     {
         _service = service;
+        _settingsService = settingsService;
         StartupTaskService = startupTaskService;
 
         _service.StateChanged += OnStateChanged;
@@ -54,6 +56,17 @@ public sealed partial class MediaPlaybackViewModel : ObservableObject, IDisposab
 
     [ObservableProperty]
     public partial bool HasTimeline { get; set; }
+
+    public bool FocusPlayPauseButtonOnFlyoutOpen
+    {
+        get => _settingsService.FocusPlayPauseButtonOnFlyoutOpen;
+        set
+        {
+            if (_settingsService.FocusPlayPauseButtonOnFlyoutOpen == value) return;
+            _settingsService.FocusPlayPauseButtonOnFlyoutOpen = value;
+            OnPropertyChanged(nameof(FocusPlayPauseButtonOnFlyoutOpen));
+        }
+    }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(PositionText))]

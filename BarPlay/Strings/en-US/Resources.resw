@@ -64,6 +64,9 @@
   <data name="ExitMenuItem.Text" xml:space="preserve">
     <value>Exit</value>
   </data>
+  <data name="FocusPlayPauseButtonOnFlyoutOpenToggleMenuFlyoutItem.Text" xml:space="preserve">
+    <value>Focus play/pause button when panel opens</value>
+  </data>
   <data name="MediaInfoButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Media info</value>
   </data>
