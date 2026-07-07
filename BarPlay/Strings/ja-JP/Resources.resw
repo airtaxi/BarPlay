@@ -70,6 +70,12 @@
   <data name="MediaInfoButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>メディア情報</value>
   </data>
+  <data name="MonitorIdentityPrimary" xml:space="preserve">
+    <value>プライマリモニター</value>
+  </data>
+  <data name="MonitorIdentitySecondary" xml:space="preserve">
+    <value>セカンダリモニター {0}</value>
+  </data>
   <data name="NextButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>次へ</value>
   </data>
@@ -84,6 +90,9 @@
   </data>
   <data name="PlayPauseButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>再生/一時停止</value>
+  </data>
+  <data name="PreferredMonitorMenuFlyoutSubItem.Text" xml:space="preserve">
+    <value>表示モニター</value>
   </data>
   <data name="PreviousButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>前へ</value>

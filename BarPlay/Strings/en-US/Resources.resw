@@ -70,6 +70,12 @@
   <data name="MediaInfoButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Media info</value>
   </data>
+  <data name="MonitorIdentityPrimary" xml:space="preserve">
+    <value>Primary monitor</value>
+  </data>
+  <data name="MonitorIdentitySecondary" xml:space="preserve">
+    <value>Secondary monitor {0}</value>
+  </data>
   <data name="NextButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Next</value>
   </data>
@@ -84,6 +90,9 @@
   </data>
   <data name="PlayPauseButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Play/Pause</value>
+  </data>
+  <data name="PreferredMonitorMenuFlyoutSubItem.Text" xml:space="preserve">
+    <value>Display monitor</value>
   </data>
   <data name="PreviousButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Previous</value>

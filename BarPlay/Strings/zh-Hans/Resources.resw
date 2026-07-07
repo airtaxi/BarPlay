@@ -70,6 +70,12 @@
   <data name="MediaInfoButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>媒体信息</value>
   </data>
+  <data name="MonitorIdentityPrimary" xml:space="preserve">
+    <value>主显示器</value>
+  </data>
+  <data name="MonitorIdentitySecondary" xml:space="preserve">
+    <value>辅助显示器 {0}</value>
+  </data>
   <data name="NextButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>下一首</value>
   </data>
@@ -84,6 +90,9 @@
   </data>
   <data name="PlayPauseButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>播放/暂停</value>
+  </data>
+  <data name="PreferredMonitorMenuFlyoutSubItem.Text" xml:space="preserve">
+    <value>显示显示器</value>
   </data>
   <data name="PreviousButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>上一首</value>

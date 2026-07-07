@@ -287,7 +287,7 @@
                         Background="Transparent"
                         BorderBrush="Transparent">
                         <Button.Flyout>
-                            <MenuFlyout Placement="BottomEdgeAlignedLeft">
+                            <MenuFlyout Opened="OnSettingsFlyoutOpened" Placement="BottomEdgeAlignedLeft">
                                 <ToggleMenuFlyoutItem
                                     x:Name="AutoStartToggleMenuFlyoutItem"
                                     x:Uid="AutoStartToggleMenuFlyoutItem"
@@ -297,6 +297,7 @@
                                     x:Name="FocusPlayPauseButtonOnFlyoutOpenToggleMenuFlyoutItem"
                                     x:Uid="FocusPlayPauseButtonOnFlyoutOpenToggleMenuFlyoutItem"
                                     IsChecked="{x:Bind ViewModel.FocusPlayPauseButtonOnFlyoutOpen, Mode=TwoWay}" />
+                                <MenuFlyoutSubItem x:Name="PreferredMonitorMenuFlyoutSubItem" x:Uid="PreferredMonitorMenuFlyoutSubItem" />
                                 <MenuFlyoutSeparator />
                                 <MenuFlyoutItem x:Uid="ExitMenuItem" Command="{x:Bind ViewModel.ExitCommand}" />
                             </MenuFlyout>

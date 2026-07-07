@@ -1,5 +1,7 @@
-﻿using Deskband11Lib.WinUI;
+﻿using BarPlay.Services;
+using Deskband11Lib.WinUI;
 using Microsoft.UI.Xaml;
+using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.InteropServices;
 using WinUIEx;
 
@@ -26,7 +28,8 @@ public sealed partial class MainWindow : Window
     {
         InitializeComponent();
 
-        TaskbarContentHost ??= new TaskbarContentHost(this, (FrameworkElement)Content, new() { PreferredWidth = 380, PreferredHeight = 48 });
+        var settingsService = App.Services.GetRequiredService<ISettingsService>();
+        TaskbarContentHost ??= new TaskbarContentHost(this, (FrameworkElement)Content, new() { PreferredWidth = 380, PreferredHeight = 48, PreferredMonitorIdentity = settingsService.PreferredMonitorIdentity });
 
         _windowSubclassProcedure = OnWindowSubclassProcedure;
         _ = SetWindowSubclass(this.GetWindowHandle(), _windowSubclassProcedure, 1, 0);

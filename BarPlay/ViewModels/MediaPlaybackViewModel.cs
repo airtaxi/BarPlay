@@ -1,7 +1,9 @@
-﻿using BarPlay.Models;
+﻿using BarPlay.Messages;
+using BarPlay.Models;
 using BarPlay.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 
@@ -13,16 +15,18 @@ public sealed partial class MediaPlaybackViewModel : ObservableObject, IDisposab
 
     public IStartupTaskService StartupTaskService { get; }
     private readonly ISettingsService _settingsService;
+    private readonly ILocalizationService _localizationService;
     private readonly ISystemMediaTransportService _service;
     private bool _isUserSeeking;
     private bool _isApplyingSnapshotPosition;
     private bool _isDisposed;
     private bool _hasOptimisticToggle;
 
-    public MediaPlaybackViewModel(ISystemMediaTransportService service, IStartupTaskService startupTaskService, ISettingsService settingsService)
+    public MediaPlaybackViewModel(ISystemMediaTransportService service, IStartupTaskService startupTaskService, ISettingsService settingsService, ILocalizationService localizationService)
     {
         _service = service;
         _settingsService = settingsService;
+        _localizationService = localizationService;
         StartupTaskService = startupTaskService;
 
         _service.StateChanged += OnStateChanged;
@@ -66,6 +70,30 @@ public sealed partial class MediaPlaybackViewModel : ObservableObject, IDisposab
             _settingsService.FocusPlayPauseButtonOnFlyoutOpen = value;
             OnPropertyChanged(nameof(FocusPlayPauseButtonOnFlyoutOpen));
         }
+    }
+
+    [ObservableProperty]
+    public partial IReadOnlyList<MonitorIdentityOption> MonitorIdentities { get; set; } = [];
+
+    public void RefreshMonitorIdentities(IReadOnlyList<int> availableIdentities)
+    {
+        var currentIdentity = _settingsService.PreferredMonitorIdentity;
+        MonitorIdentities = [.. availableIdentities.Select(identity => new MonitorIdentityOption { Identity = identity, DisplayName = GetMonitorIdentityDisplayName(identity), IsChecked = identity == currentIdentity })];
+    }
+
+    [RelayCommand]
+    private void SelectMonitorIdentity(int identity)
+    {
+        if (_settingsService.PreferredMonitorIdentity == identity) return;
+        _settingsService.PreferredMonitorIdentity = identity;
+        RefreshMonitorIdentities(MonitorIdentities.Select(option => option.Identity).ToList());
+        WeakReferenceMessenger.Default.Send<PreferredMonitorChangedMessage>();
+    }
+
+    public string GetMonitorIdentityDisplayName(int identity)
+    {
+        if (identity <= 0) return _localizationService.GetString("MonitorIdentityPrimary");
+        return _localizationService.GetFormattedString("MonitorIdentitySecondary", identity);
     }
 
     [ObservableProperty]

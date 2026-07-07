@@ -70,6 +70,12 @@
   <data name="MediaInfoButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>미디어 정보</value>
   </data>
+  <data name="MonitorIdentityPrimary" xml:space="preserve">
+    <value>기본 모니터</value>
+  </data>
+  <data name="MonitorIdentitySecondary" xml:space="preserve">
+    <value>보조 모니터 {0}</value>
+  </data>
   <data name="NextButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>다음</value>
   </data>
@@ -84,6 +90,9 @@
   </data>
   <data name="PlayPauseButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>재생/일시정지</value>
+  </data>
+  <data name="PreferredMonitorMenuFlyoutSubItem.Text" xml:space="preserve">
+    <value>표시할 모니터</value>
   </data>
   <data name="PreviousButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>이전</value>
