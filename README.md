@@ -2,8 +2,8 @@
 
 🌐 [한국어](README.ko.md)
 
-BarPlay is a lightweight Windows taskbar widget that brings media playback information and controls directly to your Windows 11 taskbar.
-It seamlessly integrates as a deskband, allowing you to view the currently playing media and control playback without switching windows.
+BarPlay is a lightweight Windows taskbar widget that shows media playback information and controls on your Windows 11 taskbar.
+It integrates as a deskband, so you can view the currently playing media and control playback without switching windows.
 
 [![Download from Microsoft Store](https://get.microsoft.com/images/en-US%20dark.svg)](https://apps.microsoft.com/detail/9N841L4XR28R)
 
@@ -11,14 +11,14 @@ It seamlessly integrates as a deskband, allowing you to view the currently playi
 
 ## Features
 
-- Seamlessly integrates into the Windows 11 taskbar as a deskband widget
-- Displays current playing media thumbnail, title, and description at a glance
-- Click the artwork to jump directly to the currently playing app
-- Provides quick access to Previous, Play/Pause, and Next transport controls
-- Interactive seek slider inside an expanded flyout menu
-- Works universally with any app supporting Windows System Media Transport Controls (Spotify, Web Browsers, YouTube, etc.)
-- Run at system startup (auto-start) option
-- Compiled with NativeAOT for lightning-fast startup and minimal resource consumption
+- Integrates into the Windows 11 taskbar as a deskband widget
+- Shows the current playing media thumbnail, title, and description
+- Click the artwork to jump to the currently playing app
+- Previous, Play/Pause, and Next transport controls
+- Seek slider in an expanded flyout menu
+- Works with any app that supports Windows System Media Transport Controls (Spotify, web browsers, YouTube, etc.)
+- Option to run at system startup (auto-start)
+- Compiled with NativeAOT for fast startup and low resource use
 - Multilingual UI (English, Korean, Japanese, Chinese Simplified, Chinese Traditional)
 
 ## Libraries Used
