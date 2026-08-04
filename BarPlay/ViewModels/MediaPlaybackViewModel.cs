@@ -87,7 +87,7 @@ public sealed partial class MediaPlaybackViewModel : ObservableObject, IDisposab
     {
         if (_settingsService.PreferredMonitorIdentity == identity) return;
         _settingsService.PreferredMonitorIdentity = identity;
-        RefreshMonitorIdentities(MonitorIdentities.Select(option => option.Identity).ToList());
+        RefreshMonitorIdentities([.. MonitorIdentities.Select(option => option.Identity)]);
         WeakReferenceMessenger.Default.Send<PreferredMonitorChangedMessage>();
     }
 
