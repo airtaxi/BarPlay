@@ -20,6 +20,7 @@ public partial class App : Application
     {
         Services = ConfigureServices();
         WeakReferenceMessenger.Default.Register<PreferredMonitorChangedMessage>(this, OnPreferredMonitorChanged);
+        WeakReferenceMessenger.Default.Register<PlacementChangedMessage>(this, OnPlacementChanged);
         await Task.Delay(1000);
         await InitializeMainWindowAsync();
     }
@@ -56,7 +57,11 @@ public partial class App : Application
         }
     }
 
-    private async void OnPreferredMonitorChanged(object recipient, PreferredMonitorChangedMessage message)
+    private async void OnPreferredMonitorChanged(object recipient, PreferredMonitorChangedMessage message) => await RecreateMainWindowAsync();
+
+    private async void OnPlacementChanged(object recipient, PlacementChangedMessage message) => await RecreateMainWindowAsync();
+
+    private async Task RecreateMainWindowAsync()
     {
         var oldWindow = _window;
 
@@ -66,7 +71,6 @@ public partial class App : Application
         await InitializeMainWindowAsync();
 
         oldWindow?.Close();
-        oldWindow = null;
     }
 
     private async Task ReinitializeMainWindowAsync()

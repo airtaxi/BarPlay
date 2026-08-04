@@ -42,7 +42,11 @@ public sealed partial class MediaTaskbarContent : UserControl
         }
     }
 
-    private void OnSettingsFlyoutOpened(object sender, object e) => RefreshPreferredMonitorMenu();
+    private void OnSettingsFlyoutOpened(object sender, object e)
+    {
+        RefreshPreferredMonitorMenu();
+        RefreshPlacementMenu();
+    }
 
     private void RefreshPreferredMonitorMenu()
     {
@@ -80,6 +84,32 @@ public sealed partial class MediaTaskbarContent : UserControl
         if (sender is RadioMenuFlyoutItem radioItem && radioItem.Tag is int identity)
         {
             ViewModel.SelectMonitorIdentityCommand.Execute(identity);
+        }
+    }
+
+    private void RefreshPlacementMenu()
+    {
+        ViewModel.RefreshPlacements();
+
+        PlacementMenuFlyoutSubItem.Items.Clear();
+        foreach (var option in ViewModel.Placements)
+        {
+            var radioItem = new RadioMenuFlyoutItem
+            {
+                Text = option.DisplayName,
+                IsChecked = option.IsChecked,
+                Tag = option.Placement
+            };
+            radioItem.Click += OnPlacementRadioItemClick;
+            PlacementMenuFlyoutSubItem.Items.Add(radioItem);
+        }
+    }
+
+    private void OnPlacementRadioItemClick(object sender, RoutedEventArgs e)
+    {
+        if (sender is RadioMenuFlyoutItem radioItem && radioItem.Tag is TaskbarContentPlacement placement)
+        {
+            ViewModel.SelectPlacementCommand.Execute(placement);
         }
     }
 }

@@ -298,6 +298,7 @@
                                     x:Uid="FocusPlayPauseButtonOnFlyoutOpenToggleMenuFlyoutItem"
                                     IsChecked="{x:Bind ViewModel.FocusPlayPauseButtonOnFlyoutOpen, Mode=TwoWay}" />
                                 <MenuFlyoutSubItem x:Name="PreferredMonitorMenuFlyoutSubItem" x:Uid="PreferredMonitorMenuFlyoutSubItem" />
+                                <MenuFlyoutSubItem x:Name="PlacementMenuFlyoutSubItem" x:Uid="PlacementMenuFlyoutSubItem" />
                                 <MenuFlyoutSeparator />
                                 <MenuFlyoutItem x:Uid="ExitMenuItem" Command="{x:Bind ViewModel.ExitCommand}" />
                             </MenuFlyout>

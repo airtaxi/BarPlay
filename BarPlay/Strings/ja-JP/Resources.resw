@@ -88,6 +88,21 @@
   <data name="OpenSourceAppArtworkButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>メディアアプリを開く</value>
   </data>
+  <data name="PlacementAuto" xml:space="preserve">
+    <value>自動</value>
+  </data>
+  <data name="PlacementBeforeNotificationArea" xml:space="preserve">
+    <value>通知領域の前</value>
+  </data>
+  <data name="PlacementBeforeStartButton" xml:space="preserve">
+    <value>スタートボタンの前</value>
+  </data>
+  <data name="PlacementLeftEdge" xml:space="preserve">
+    <value>左端</value>
+  </data>
+  <data name="PlacementMenuFlyoutSubItem.Text" xml:space="preserve">
+    <value>優先表示位置</value>
+  </data>
   <data name="PlayPauseButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>再生/一時停止</value>
   </data>

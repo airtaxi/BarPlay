@@ -4,6 +4,7 @@ using BarPlay.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Deskband11Lib.Core;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 
@@ -94,6 +95,33 @@ public sealed partial class MediaPlaybackViewModel : ObservableObject, IDisposab
     {
         if (identity <= 0) return _localizationService.GetString("MonitorIdentityPrimary");
         return _localizationService.GetFormattedString("MonitorIdentitySecondary", identity);
+    }
+
+    [ObservableProperty]
+    public partial IReadOnlyList<TaskbarPlacementOption> Placements { get; set; } = [];
+
+    public void RefreshPlacements()
+    {
+        var currentPlacement = _settingsService.Placement;
+        Placements = [.. Enum.GetValues<TaskbarContentPlacement>().Select(placement => new TaskbarPlacementOption { Placement = placement, DisplayName = GetPlacementDisplayName(placement), IsChecked = placement == currentPlacement })];
+    }
+
+    public string GetPlacementDisplayName(TaskbarContentPlacement placement) => placement switch
+    {
+        TaskbarContentPlacement.Auto => _localizationService.GetString("PlacementAuto"),
+        TaskbarContentPlacement.LeftEdge => _localizationService.GetString("PlacementLeftEdge"),
+        TaskbarContentPlacement.BeforeNotificationArea => _localizationService.GetString("PlacementBeforeNotificationArea"),
+        TaskbarContentPlacement.BeforeStartButton => _localizationService.GetString("PlacementBeforeStartButton"),
+        _ => placement.ToString()
+    };
+
+    [RelayCommand]
+    private void SelectPlacement(TaskbarContentPlacement placement)
+    {
+        if (_settingsService.Placement == placement) return;
+        _settingsService.Placement = placement;
+        RefreshPlacements();
+        WeakReferenceMessenger.Default.Send<PlacementChangedMessage>();
     }
 
     [ObservableProperty]

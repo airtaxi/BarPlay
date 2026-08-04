@@ -29,7 +29,7 @@ public sealed partial class MainWindow : Window
         InitializeComponent();
 
         var settingsService = App.Services.GetRequiredService<ISettingsService>();
-        TaskbarContentHost ??= new TaskbarContentHost(this, (FrameworkElement)Content, new() { PreferredWidth = 380, PreferredHeight = 48, PreferredMonitorIdentity = settingsService.PreferredMonitorIdentity });
+        TaskbarContentHost ??= new TaskbarContentHost(this, (FrameworkElement)Content, new() { PreferredWidth = 380, PreferredHeight = 48, PreferredMonitorIdentity = settingsService.PreferredMonitorIdentity, Placement = settingsService.Placement });
 
         _windowSubclassProcedure = OnWindowSubclassProcedure;
         _ = SetWindowSubclass(this.GetWindowHandle(), _windowSubclassProcedure, 1, 0);

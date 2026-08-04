@@ -88,6 +88,21 @@
   <data name="OpenSourceAppArtworkButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>打开媒体应用</value>
   </data>
+  <data name="PlacementAuto" xml:space="preserve">
+    <value>自动</value>
+  </data>
+  <data name="PlacementBeforeNotificationArea" xml:space="preserve">
+    <value>通知区域前</value>
+  </data>
+  <data name="PlacementBeforeStartButton" xml:space="preserve">
+    <value>开始按钮前</value>
+  </data>
+  <data name="PlacementLeftEdge" xml:space="preserve">
+    <value>左边缘</value>
+  </data>
+  <data name="PlacementMenuFlyoutSubItem.Text" xml:space="preserve">
+    <value>首选显示位置</value>
+  </data>
   <data name="PlayPauseButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>播放/暂停</value>
   </data>
