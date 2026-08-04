@@ -21,6 +21,7 @@
 		<GenerateTemporaryStoreCertificate>true</GenerateTemporaryStoreCertificate>
 		<PublishAot>true</PublishAot>
 		<LangVersion>preview</LangVersion>
+		<DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GenerateAppInstallerFile>False</GenerateAppInstallerFile>
