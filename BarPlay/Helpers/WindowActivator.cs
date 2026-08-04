@@ -11,20 +11,42 @@ internal static partial class WindowActivator
     private const uint KeyEventKeyUp = 0x02;
 
     private const int MaxApplicationUserModelIdLength = 130;
+    private const int MaxWindowTitleLength = 512;
+    private const int MinMediaTitleLengthForMatching = 8;
 
     private static readonly EnumWindowsProc s_enumWindowsCallback = OnEnumWindows;
     private static readonly List<nint> s_windowHandles = [];
 
     private delegate bool EnumWindowsProc(nint windowHandle, nint lParam);
 
-    public static bool TryActivateRunningInstance(string appUserModelId)
+    public static bool TryActivateRunningInstance(string? appUserModelId, string? mediaTitle = null)
     {
+        // Edge PWAs render inside a browser process that carries no package AUMID (the AUMID lives on
+        // the invisible pwahelper host), so the media title is matched against visible window titles
+        // first. The process AUMID path below covers ordinary packaged apps such as music players.
+        if (!string.IsNullOrWhiteSpace(mediaTitle))
+        {
+            var trimmedMediaTitle = mediaTitle.Trim();
+            if (trimmedMediaTitle.Length >= MinMediaTitleLengthForMatching)
+            {
+                var titleWindowHandle = FindVisibleWindowByTitle(trimmedMediaTitle);
+                if (titleWindowHandle != 0) return ActivateWindow(titleWindowHandle);
+            }
+        }
+
+        if (string.IsNullOrWhiteSpace(appUserModelId)) return false;
+
         var targetProcessIds = FindProcessIdsByApplicationUserModelId(appUserModelId);
         if (targetProcessIds.Count == 0) return false;
 
         var windowHandle = FindVisibleWindow(targetProcessIds);
         if (windowHandle == 0) return false;
 
+        return ActivateWindow(windowHandle);
+    }
+
+    private static bool ActivateWindow(nint windowHandle)
+    {
         if (IsIconic(windowHandle)) _ = ShowWindow(windowHandle, ShowWindowRestore);
 
         if (SetForegroundWindow(windowHandle)) return true;
@@ -37,6 +59,72 @@ internal static partial class WindowActivator
         keybd_event(VirtualKeyMenu, 0, KeyEventKeyUp, 0);
         _ = SetForegroundWindow(windowHandle);
         return true;
+    }
+
+    private static nint FindVisibleWindowByTitle(string mediaTitle)
+    {
+        List<nint> windows;
+        lock (s_windowHandles)
+        {
+            s_windowHandles.Clear();
+            _ = EnumWindows(s_enumWindowsCallback, 0);
+            windows = [.. s_windowHandles];
+        }
+
+        var fullMatchWindowHandle = FindTitleMatch(windows, mediaTitle);
+        if (fullMatchWindowHandle != 0) return fullMatchWindowHandle;
+
+        // Window title bars truncate long titles with an ellipsis, so progressively shorter prefixes
+        // of the media title are tried before giving up.
+        foreach (var prefixLength in new[] { 40, 30, 20 })
+        {
+            if (mediaTitle.Length <= prefixLength) continue;
+
+            var prefixMatchWindowHandle = FindTitleMatch(windows, mediaTitle[..prefixLength]);
+            if (prefixMatchWindowHandle != 0) return prefixMatchWindowHandle;
+        }
+
+        return 0;
+    }
+
+    private static nint FindTitleMatch(List<nint> windows, string searchTitle)
+    {
+        nint firstCandidateWindowHandle = 0;
+        nint pwaStyleWindowHandle = 0;
+        foreach (var windowHandle in windows)
+        {
+            if (!IsWindowVisible(windowHandle)) continue;
+
+            var windowTitle = GetWindowTitle(windowHandle);
+            if (string.IsNullOrEmpty(windowTitle)) continue;
+
+            var titleIndex = windowTitle.IndexOf(searchTitle, StringComparison.OrdinalIgnoreCase);
+            if (titleIndex < 0) continue;
+
+            if (firstCandidateWindowHandle == 0) firstCandidateWindowHandle = windowHandle;
+
+            // PWA windows follow the "<AppName> - <title> - <AppName>" pattern, so the media title
+            // appears after a leading segment instead of at the start of the window title. Preferring
+            // that shape avoids activating a plain browser tab that happens to play the same content.
+            if (titleIndex > 0 && pwaStyleWindowHandle == 0) pwaStyleWindowHandle = windowHandle;
+        }
+
+        return pwaStyleWindowHandle != 0 ? pwaStyleWindowHandle : firstCandidateWindowHandle;
+    }
+
+    private static string GetWindowTitle(nint windowHandle)
+    {
+        Span<char> buffer = stackalloc char[MaxWindowTitleLength];
+
+        unsafe
+        {
+            fixed (char* bufferPointer = buffer)
+            {
+                var titleLength = GetWindowText(windowHandle, bufferPointer, buffer.Length);
+                if (titleLength <= 0) return string.Empty;
+                return new string(buffer[..titleLength]);
+            }
+        }
     }
 
     private static HashSet<uint> FindProcessIdsByApplicationUserModelId(string appUserModelId)
@@ -122,6 +210,9 @@ internal static partial class WindowActivator
     [LibraryImport("user32.dll")]
     private static partial uint GetWindowThreadProcessId(nint windowHandle, out uint processId);
 
+    [LibraryImport("user32.dll", EntryPoint = "GetWindowTextW")]
+    private static unsafe partial int GetWindowText(nint windowHandle, char* windowTitle, int maxCount);
+
     [LibraryImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static partial bool IsWindowVisible(nint windowHandle);
@@ -138,7 +229,7 @@ internal static partial class WindowActivator
     [return: MarshalAs(UnmanagedType.Bool)]
     private static partial bool SetForegroundWindow(nint windowHandle);
 
-    // Simulates a single Alt key-up to work around the Windows foreground lock (see TryActivateRunningInstance).
+    // Simulates a single Alt key-up to work around the Windows foreground lock (see ActivateWindow).
     // The generated input is not delivered to any window, so it has no effect on the user's own keyboard input.
     [LibraryImport("user32.dll")]
     private static partial void keybd_event(byte virtualKey, byte scanCode, uint flags, nuint extraInfo);

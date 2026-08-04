@@ -65,13 +65,21 @@ public sealed partial class SystemMediaTransportService : ISystemMediaTransportS
         return await _currentSession.TryChangePlaybackPositionAsync(positionTicks);
     }
 
-    public Task<bool> OpenSourceAppAsync()
+    public async Task<bool> OpenSourceAppAsync()
     {
         var sourceAppUserModelId = _currentSession?.SourceAppUserModelId;
-        if (string.IsNullOrWhiteSpace(sourceAppUserModelId)) return Task.FromResult(false);
 
-        // Activating the running instance instead of relaunching keeps PWA windows in place.
-        if (WindowActivator.TryActivateRunningInstance(sourceAppUserModelId)) return Task.FromResult(true);
+        string? mediaTitle = null;
+        if (_currentSession is not null)
+        {
+            try { mediaTitle = (await _currentSession.TryGetMediaPropertiesAsync()).Title; }
+            catch { }
+        }
+
+        // Activating the existing instance instead of relaunching keeps PWA windows in place.
+        if (WindowActivator.TryActivateRunningInstance(sourceAppUserModelId, mediaTitle)) return true;
+
+        if (string.IsNullOrWhiteSpace(sourceAppUserModelId)) return false;
 
         try
         {
@@ -82,9 +90,9 @@ public sealed partial class SystemMediaTransportService : ISystemMediaTransportS
             };
 
             Process.Start(processStartInfo);
-            return Task.FromResult(true);
+            return true;
         }
-        catch { return Task.FromResult(false); }
+        catch { return false; }
     }
 
     public void Dispose()
