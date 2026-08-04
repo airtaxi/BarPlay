@@ -1,4 +1,4 @@
-using BarPlay.Helpers;
+﻿using BarPlay.Helpers;
 using BarPlay.Models;
 using System.Diagnostics;
 using Microsoft.UI.Dispatching;
@@ -77,7 +77,7 @@ public sealed partial class SystemMediaTransportService : ISystemMediaTransportS
         }
 
         // Activating the existing instance instead of relaunching keeps PWA windows in place.
-        if (WindowActivator.TryActivateRunningInstance(sourceAppUserModelId, mediaTitle)) return true;
+        if (WindowHelper.TryActivateRunningInstance(sourceAppUserModelId, mediaTitle)) return true;
 
         if (string.IsNullOrWhiteSpace(sourceAppUserModelId)) return false;
 

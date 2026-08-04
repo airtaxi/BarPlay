@@ -1,4 +1,5 @@
-﻿using BarPlay.Messages;
+﻿using BarPlay.Helpers;
+using BarPlay.Messages;
 using BarPlay.Services;
 using BarPlay.ViewModels;
 using CommunityToolkit.Mvvm.Messaging;
@@ -41,6 +42,8 @@ public partial class App : Application
 
     private async Task InitializeMainWindowAsync()
     {
+        if (_window is not null) return;
+
         var window = new MainWindow();
         _window = window;
         window.TaskbarContentHost.TaskbarWindowRecreated += OnTaskbarContentHostTaskbarWindowChanged;
@@ -72,27 +75,16 @@ public partial class App : Application
         oldWindow?.TaskbarContentHost.TaskbarWindowRecreated -= OnTaskbarContentHostTaskbarWindowChanged;
         oldWindow?.TaskbarContentHost.TaskbarWindowDisappeared -= OnTaskbarContentHostTaskbarWindowChanged;
         oldWindow?.Closed -= OnWindowClosed;
+        _window = null;
 
         await InitializeMainWindowAsync();
 
-        oldWindow?.Close();
+        if (WindowHelper.IsWindowAlive(oldWindow)) oldWindow?.Close();
     }
 
-    private async Task ReinitializeMainWindowAsync()
-    {
-        if (_window is not null)
-        {
-            _window.TaskbarContentHost.TaskbarWindowRecreated -= OnTaskbarContentHostTaskbarWindowChanged;
-            _window.TaskbarContentHost.TaskbarWindowDisappeared -= OnTaskbarContentHostTaskbarWindowChanged;
-            _window.Closed -= OnWindowClosed;
-            _window.Close();
-            _window = null;
-        }
-
-        await Task.Delay(500);
-        await InitializeMainWindowAsync();
-    }
-
+    // The old window can only be closed safely while it is still alive: when the taskbar disappears,
+    // the hosted window is destroyed together with the taskbar, and closing it again triggers a
+    // fail-fast inside Microsoft.UI.Xaml while the host restores the window state.
     private async void OnTaskbarContentHostTaskbarWindowChanged(object? sender, EventArgs e)
     {
         var oldWindow = _window;
@@ -100,10 +92,11 @@ public partial class App : Application
         oldWindow?.TaskbarContentHost.TaskbarWindowRecreated -= OnTaskbarContentHostTaskbarWindowChanged;
         oldWindow?.TaskbarContentHost.TaskbarWindowDisappeared -= OnTaskbarContentHostTaskbarWindowChanged;
         oldWindow?.Closed -= OnWindowClosed;
+        _window = null;
 
+        // Wait for the taskbar to be ready before recreating the window.
         await Task.Delay(1000);
         await InitializeMainWindowAsync();
-
-        oldWindow?.Close();
+        if (WindowHelper.IsWindowAlive(oldWindow)) oldWindow?.Close();
     }
 }

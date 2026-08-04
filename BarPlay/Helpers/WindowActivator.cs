@@ -1,9 +1,11 @@
+﻿using Microsoft.UI.Xaml;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using WinRT.Interop;
 
 namespace BarPlay.Helpers;
 
-internal static partial class WindowActivator
+internal static partial class WindowHelper
 {
     private const uint ProcessQueryLimitedInformation = 0x1000;
     private const int ShowWindowRestore = 9;
@@ -43,6 +45,18 @@ internal static partial class WindowActivator
         if (windowHandle == 0) return false;
 
         return ActivateWindow(windowHandle);
+    }
+
+    public static bool IsWindowAlive(Window? window)
+    {
+        if (window is null) return false;
+
+        try
+        {
+            var windowHandle = WindowNative.GetWindowHandle(window);
+            return windowHandle != 0 && IsWindow(windowHandle);
+        }
+        catch { return false; }
     }
 
     private static bool ActivateWindow(nint windowHandle)
@@ -220,6 +234,10 @@ internal static partial class WindowActivator
     [LibraryImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static partial bool IsIconic(nint windowHandle);
+
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static partial bool IsWindow(nint windowHandle);
 
     [LibraryImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
