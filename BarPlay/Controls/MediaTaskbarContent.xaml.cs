@@ -58,7 +58,7 @@ public sealed partial class MediaTaskbarContent : UserControl
         PreferredMonitorMenuFlyoutSubItem.Items.Clear();
         foreach (var option in ViewModel.MonitorIdentities)
         {
-            var radioItem = new RadioMenuFlyoutItem
+            var radioItem = new ToggleMenuFlyoutItem
             {
                 Text = option.DisplayName,
                 IsChecked = option.IsChecked,
@@ -71,7 +71,7 @@ public sealed partial class MediaTaskbarContent : UserControl
         var hasCurrentIdentity = ViewModel.MonitorIdentities.Any(x => x.Identity == _settingsService.PreferredMonitorIdentity);
         if (!hasCurrentIdentity)
         {
-            var radioItem = new RadioMenuFlyoutItem()
+            var radioItem = new ToggleMenuFlyoutItem()
             {
                 Text = ViewModel.GetMonitorIdentityDisplayName(_settingsService.PreferredMonitorIdentity),
                 IsChecked = true,
@@ -83,7 +83,7 @@ public sealed partial class MediaTaskbarContent : UserControl
 
     private void OnPreferredMonitorRadioItemClick(object sender, RoutedEventArgs e)
     {
-        if (sender is RadioMenuFlyoutItem radioItem && radioItem.Tag is int identity)
+        if (sender is ToggleMenuFlyoutItem radioItem && radioItem.Tag is int identity)
         {
             ViewModel.SelectMonitorIdentityCommand.Execute(identity);
         }
@@ -96,7 +96,7 @@ public sealed partial class MediaTaskbarContent : UserControl
         PlacementMenuFlyoutSubItem.Items.Clear();
         foreach (var option in ViewModel.Placements)
         {
-            var radioItem = new RadioMenuFlyoutItem
+            var radioItem = new ToggleMenuFlyoutItem
             {
                 Text = option.DisplayName,
                 IsChecked = option.IsChecked,
@@ -109,7 +109,7 @@ public sealed partial class MediaTaskbarContent : UserControl
 
     private void OnPlacementRadioItemClick(object sender, RoutedEventArgs e)
     {
-        if (sender is RadioMenuFlyoutItem radioItem && radioItem.Tag is TaskbarContentPlacement placement)
+        if (sender is ToggleMenuFlyoutItem radioItem && radioItem.Tag is TaskbarContentPlacement placement)
         {
             ViewModel.SelectPlacementCommand.Execute(placement);
         }
@@ -122,7 +122,7 @@ public sealed partial class MediaTaskbarContent : UserControl
         WidthMenuFlyoutSubItem.Items.Clear();
         foreach (var option in ViewModel.Widths)
         {
-            var radioItem = new RadioMenuFlyoutItem
+            var radioItem = new ToggleMenuFlyoutItem
             {
                 Text = option.DisplayName,
                 IsChecked = option.IsChecked,
@@ -135,7 +135,7 @@ public sealed partial class MediaTaskbarContent : UserControl
 
     private void OnWidthRadioItemClick(object sender, RoutedEventArgs e)
     {
-        if (sender is RadioMenuFlyoutItem radioItem && radioItem.Tag is TaskbarWidth width)
+        if (sender is ToggleMenuFlyoutItem radioItem && radioItem.Tag is TaskbarWidth width)
         {
             ViewModel.SelectWidthCommand.Execute(width);
         }

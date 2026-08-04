@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Deskband11Lib.Core;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
+using System.Collections.ObjectModel;
 
 namespace BarPlay.ViewModels;
 
@@ -98,7 +99,7 @@ public sealed partial class MediaPlaybackViewModel : ObservableObject, IDisposab
     }
 
     [ObservableProperty]
-    public partial IReadOnlyList<TaskbarPlacementOption> Placements { get; set; } = [];
+    public partial List<TaskbarPlacementOption> Placements { get; set; } = [];
 
     public void RefreshPlacements()
     {
@@ -125,7 +126,7 @@ public sealed partial class MediaPlaybackViewModel : ObservableObject, IDisposab
     }
 
     [ObservableProperty]
-    public partial IReadOnlyList<TaskbarWidthOption> Widths { get; set; } = [];
+    public partial List<TaskbarWidthOption> Widths { get; set; } = [];
 
     public void RefreshWidths()
     {
