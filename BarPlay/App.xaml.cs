@@ -43,7 +43,8 @@ public partial class App : Application
     {
         var window = new MainWindow();
         _window = window;
-        window.TaskbarContentHost.TaskbarWindowRecreated += OnTaskbarContentHostTaskbarWindowRecreated;
+        window.TaskbarContentHost.TaskbarWindowRecreated += OnTaskbarContentHostTaskbarWindowChanged;
+        window.TaskbarContentHost.TaskbarWindowDisappeared += OnTaskbarContentHostTaskbarWindowChanged;
         window.Closed += OnWindowClosed;
 
         await window.PrepareTaskbarContentAsync();
@@ -68,7 +69,8 @@ public partial class App : Application
     {
         var oldWindow = _window;
 
-        oldWindow?.TaskbarContentHost.TaskbarWindowRecreated -= OnTaskbarContentHostTaskbarWindowRecreated;
+        oldWindow?.TaskbarContentHost.TaskbarWindowRecreated -= OnTaskbarContentHostTaskbarWindowChanged;
+        oldWindow?.TaskbarContentHost.TaskbarWindowDisappeared -= OnTaskbarContentHostTaskbarWindowChanged;
         oldWindow?.Closed -= OnWindowClosed;
 
         await InitializeMainWindowAsync();
@@ -80,7 +82,8 @@ public partial class App : Application
     {
         if (_window is not null)
         {
-            _window.TaskbarContentHost.TaskbarWindowRecreated -= OnTaskbarContentHostTaskbarWindowRecreated;
+            _window.TaskbarContentHost.TaskbarWindowRecreated -= OnTaskbarContentHostTaskbarWindowChanged;
+            _window.TaskbarContentHost.TaskbarWindowDisappeared -= OnTaskbarContentHostTaskbarWindowChanged;
             _window.Closed -= OnWindowClosed;
             _window.Close();
             _window = null;
@@ -90,11 +93,12 @@ public partial class App : Application
         await InitializeMainWindowAsync();
     }
 
-    private async void OnTaskbarContentHostTaskbarWindowRecreated(object? sender, EventArgs e)
+    private async void OnTaskbarContentHostTaskbarWindowChanged(object? sender, EventArgs e)
     {
         var oldWindow = _window;
 
-        oldWindow?.TaskbarContentHost.TaskbarWindowRecreated -= OnTaskbarContentHostTaskbarWindowRecreated;
+        oldWindow?.TaskbarContentHost.TaskbarWindowRecreated -= OnTaskbarContentHostTaskbarWindowChanged;
+        oldWindow?.TaskbarContentHost.TaskbarWindowDisappeared -= OnTaskbarContentHostTaskbarWindowChanged;
         oldWindow?.Closed -= OnWindowClosed;
 
         await Task.Delay(1000);
