@@ -92,9 +92,14 @@ public partial class App : Application
 
     private async void OnTaskbarContentHostTaskbarWindowRecreated(object? sender, EventArgs e)
     {
-        _window?.TaskbarContentHost.TaskbarWindowRecreated -= OnTaskbarContentHostTaskbarWindowRecreated;
+        var oldWindow = _window;
+
+        oldWindow?.TaskbarContentHost.TaskbarWindowRecreated -= OnTaskbarContentHostTaskbarWindowRecreated;
+        oldWindow?.Closed -= OnWindowClosed;
 
         await Task.Delay(1000);
         await InitializeMainWindowAsync();
+
+        oldWindow?.Close();
     }
 }
