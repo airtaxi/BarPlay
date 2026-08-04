@@ -7,7 +7,6 @@ using CommunityToolkit.Mvvm.Messaging;
 using Deskband11Lib.Core;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
-using System.Collections.ObjectModel;
 
 namespace BarPlay.ViewModels;
 
