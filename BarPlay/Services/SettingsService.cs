@@ -1,3 +1,4 @@
+using BarPlay.Models;
 using Deskband11Lib.Core;
 using Windows.Storage;
 
@@ -8,6 +9,7 @@ public sealed class SettingsService : ISettingsService
     private const string FocusPlayPauseButtonOnFlyoutOpenKey = "FocusPlayPauseButtonOnFlyoutOpen";
     private const string PreferredMonitorIdentityKey = "PreferredMonitorIdentity";
     private const string PlacementKey = "Placement";
+    private const string WidthKey = "Width";
 
     public bool FocusPlayPauseButtonOnFlyoutOpen
     {
@@ -25,6 +27,12 @@ public sealed class SettingsService : ISettingsService
     {
         get => (TaskbarContentPlacement)ReadInt(PlacementKey, defaultValue: (int)TaskbarContentPlacement.Auto);
         set => WriteInt(PlacementKey, (int)value);
+    }
+
+    public TaskbarWidth Width
+    {
+        get => (TaskbarWidth)ReadInt(WidthKey, defaultValue: (int)TaskbarWidth.Wide);
+        set => WriteInt(WidthKey, (int)value);
     }
 
     private static bool ReadBool(string key, bool defaultValue) =>

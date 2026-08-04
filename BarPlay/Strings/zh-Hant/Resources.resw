@@ -112,4 +112,19 @@
   <data name="PreviousButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>上一首</value>
   </data>
+  <data name="WidthFillRemainingSpace" xml:space="preserve">
+    <value>填滿剩餘空間</value>
+  </data>
+  <data name="WidthMenuFlyoutSubItem.Text" xml:space="preserve">
+    <value>小工具寬度</value>
+  </data>
+  <data name="WidthNarrow" xml:space="preserve">
+    <value>窄</value>
+  </data>
+  <data name="WidthNormal" xml:space="preserve">
+    <value>標準</value>
+  </data>
+  <data name="WidthWide" xml:space="preserve">
+    <value>寬</value>
+  </data>
 </root>

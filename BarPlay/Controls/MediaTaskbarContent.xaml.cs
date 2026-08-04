@@ -1,4 +1,5 @@
-﻿using BarPlay.Services;
+﻿using BarPlay.Models;
+using BarPlay.Services;
 using BarPlay.ViewModels;
 using CommunityToolkit.WinUI;
 using Deskband11Lib.Core;
@@ -46,6 +47,7 @@ public sealed partial class MediaTaskbarContent : UserControl
     {
         RefreshPreferredMonitorMenu();
         RefreshPlacementMenu();
+        RefreshWidthMenu();
     }
 
     private void RefreshPreferredMonitorMenu()
@@ -110,6 +112,32 @@ public sealed partial class MediaTaskbarContent : UserControl
         if (sender is RadioMenuFlyoutItem radioItem && radioItem.Tag is TaskbarContentPlacement placement)
         {
             ViewModel.SelectPlacementCommand.Execute(placement);
+        }
+    }
+
+    private void RefreshWidthMenu()
+    {
+        ViewModel.RefreshWidths();
+
+        WidthMenuFlyoutSubItem.Items.Clear();
+        foreach (var option in ViewModel.Widths)
+        {
+            var radioItem = new RadioMenuFlyoutItem
+            {
+                Text = option.DisplayName,
+                IsChecked = option.IsChecked,
+                Tag = option.Width
+            };
+            radioItem.Click += OnWidthRadioItemClick;
+            WidthMenuFlyoutSubItem.Items.Add(radioItem);
+        }
+    }
+
+    private void OnWidthRadioItemClick(object sender, RoutedEventArgs e)
+    {
+        if (sender is RadioMenuFlyoutItem radioItem && radioItem.Tag is TaskbarWidth width)
+        {
+            ViewModel.SelectWidthCommand.Execute(width);
         }
     }
 }

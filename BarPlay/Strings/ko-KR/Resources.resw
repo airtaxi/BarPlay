@@ -112,4 +112,19 @@
   <data name="PreviousButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>이전</value>
   </data>
+  <data name="WidthFillRemainingSpace" xml:space="preserve">
+    <value>남은 공간 차지</value>
+  </data>
+  <data name="WidthMenuFlyoutSubItem.Text" xml:space="preserve">
+    <value>위젯 너비</value>
+  </data>
+  <data name="WidthNarrow" xml:space="preserve">
+    <value>좁음</value>
+  </data>
+  <data name="WidthNormal" xml:space="preserve">
+    <value>보통</value>
+  </data>
+  <data name="WidthWide" xml:space="preserve">
+    <value>넓음</value>
+  </data>
 </root>

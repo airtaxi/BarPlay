@@ -125,6 +125,33 @@ public sealed partial class MediaPlaybackViewModel : ObservableObject, IDisposab
     }
 
     [ObservableProperty]
+    public partial IReadOnlyList<TaskbarWidthOption> Widths { get; set; } = [];
+
+    public void RefreshWidths()
+    {
+        var currentWidth = _settingsService.Width;
+        Widths = [.. Enum.GetValues<TaskbarWidth>().Select(width => new TaskbarWidthOption { Width = width, DisplayName = GetWidthDisplayName(width), IsChecked = width == currentWidth })];
+    }
+
+    public string GetWidthDisplayName(TaskbarWidth width) => width switch
+    {
+        TaskbarWidth.Narrow => _localizationService.GetString("WidthNarrow"),
+        TaskbarWidth.Normal => _localizationService.GetString("WidthNormal"),
+        TaskbarWidth.Wide => _localizationService.GetString("WidthWide"),
+        TaskbarWidth.FillRemainingSpace => _localizationService.GetString("WidthFillRemainingSpace"),
+        _ => width.ToString()
+    };
+
+    [RelayCommand]
+    private void SelectWidth(TaskbarWidth width)
+    {
+        if (_settingsService.Width == width) return;
+        _settingsService.Width = width;
+        RefreshWidths();
+        WeakReferenceMessenger.Default.Send<WidthChangedMessage>();
+    }
+
+    [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(PositionText))]
     public partial double PositionTicks { get; set; }
 

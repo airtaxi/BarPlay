@@ -1,3 +1,4 @@
+using BarPlay.Models;
 using Deskband11Lib.Core;
 
 namespace BarPlay.Services;
@@ -9,4 +10,6 @@ public interface ISettingsService
     int PreferredMonitorIdentity { get; set; }
 
     TaskbarContentPlacement Placement { get; set; }
+
+    TaskbarWidth Width { get; set; }
 }
