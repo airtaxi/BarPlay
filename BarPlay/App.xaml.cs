@@ -1,8 +1,8 @@
-﻿using BarPlay.Helpers;
-using BarPlay.Messages;
+﻿using BarPlay.Messages;
 using BarPlay.Services;
 using BarPlay.ViewModels;
 using CommunityToolkit.Mvvm.Messaging;
+using Deskband11Lib.WinUI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
@@ -11,7 +11,7 @@ namespace BarPlay;
 
 public partial class App : Application
 {
-    private MainWindow? _window;
+    private static MainWindow? s_mainWindow;
 
     public static IServiceProvider Services { get; private set; } = null!;
 
@@ -40,26 +40,16 @@ public partial class App : Application
         return services.BuildServiceProvider();
     }
 
-    private async Task InitializeMainWindowAsync()
+    private static async Task InitializeMainWindowAsync()
     {
-        if (_window is not null) return;
+        if (s_mainWindow is not null) return;
 
-        var window = new MainWindow();
-        _window = window;
-        window.TaskbarContentHost.TaskbarWindowRecreated += OnTaskbarContentHostTaskbarWindowChanged;
-        window.TaskbarContentHost.TaskbarWindowDisappeared += OnTaskbarContentHostTaskbarWindowChanged;
-        window.Closed += OnWindowClosed;
+        var mainWindow = new MainWindow();
+        s_mainWindow = mainWindow;
+        mainWindow.TaskbarContentHost.TaskbarWindowRecreationRequired += OnTaskbarContentHostTaskbarWindowRecreationRequired;
 
-        await window.PrepareTaskbarContentAsync();
-        window.Activate();
-    }
-
-    private void OnWindowClosed(object sender, WindowEventArgs args)
-    {
-        if (sender is Window window)
-        {
-            window.Closed -= OnWindowClosed;
-        }
+        await mainWindow.PrepareTaskbarContentAsync();
+        mainWindow.Activate();
     }
 
     private async void OnPreferredMonitorChanged(object recipient, PreferredMonitorChangedMessage message) => await RecreateMainWindowAsync();
@@ -68,35 +58,33 @@ public partial class App : Application
 
     private async void OnWidthChanged(object recipient, WidthChangedMessage message) => await RecreateMainWindowAsync();
 
-    private async Task RecreateMainWindowAsync()
+    private static async Task RecreateMainWindowAsync()
     {
-        var oldWindow = _window;
-
-        oldWindow?.TaskbarContentHost.TaskbarWindowRecreated -= OnTaskbarContentHostTaskbarWindowChanged;
-        oldWindow?.TaskbarContentHost.TaskbarWindowDisappeared -= OnTaskbarContentHostTaskbarWindowChanged;
-        oldWindow?.Closed -= OnWindowClosed;
-        _window = null;
+        var oldMainWindow = s_mainWindow;
+        if (oldMainWindow is not null) ReleaseMainWindow(oldMainWindow);
 
         await InitializeMainWindowAsync();
 
-        if (WindowHelper.IsWindowAlive(oldWindow)) oldWindow?.Close();
+        if (oldMainWindow?.IsWindowAlive() == true) oldMainWindow.Close();
     }
 
-    // The old window can only be closed safely while it is still alive: when the taskbar disappears,
-    // the hosted window is destroyed together with the taskbar, and closing it again triggers a
-    // fail-fast inside Microsoft.UI.Xaml while the host restores the window state.
-    private async void OnTaskbarContentHostTaskbarWindowChanged(object? sender, EventArgs e)
+    // The hosted window is recreated when Explorer restarts, the monitor is disconnected, or the system DPI changes,
+    // so the main window must be recreated to attach to the new taskbar.
+    private static async void OnTaskbarContentHostTaskbarWindowRecreationRequired(object? sender, EventArgs e)
     {
-        var oldWindow = _window;
+        var oldMainWindow = s_mainWindow;
+        if (oldMainWindow is not null) ReleaseMainWindow(oldMainWindow);
 
-        oldWindow?.TaskbarContentHost.TaskbarWindowRecreated -= OnTaskbarContentHostTaskbarWindowChanged;
-        oldWindow?.TaskbarContentHost.TaskbarWindowDisappeared -= OnTaskbarContentHostTaskbarWindowChanged;
-        oldWindow?.Closed -= OnWindowClosed;
-        _window = null;
-
-        // Wait for the taskbar to be ready before recreating the window.
+        // Wait for the taskbar to be ready before recreating the main window.
         await Task.Delay(1000);
         await InitializeMainWindowAsync();
-        if (WindowHelper.IsWindowAlive(oldWindow)) oldWindow?.Close();
+
+        if (oldMainWindow?.IsWindowAlive() == true) oldMainWindow.Close();
+    }
+
+    private static void ReleaseMainWindow(MainWindow mainWindow)
+    {
+        mainWindow.TaskbarContentHost.Dispose();
+        if (ReferenceEquals(s_mainWindow, mainWindow)) s_mainWindow = null;
     }
 }
