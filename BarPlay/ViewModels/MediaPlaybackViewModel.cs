@@ -225,6 +225,8 @@ public sealed partial class MediaPlaybackViewModel : ObservableObject, IDisposab
         Title = snapshot.Title;
         Description = snapshot.Description;
         Thumbnail = snapshot.Thumbnail;
+        IsThumbnailVisible = snapshot.Thumbnail is not null;
+        System.Diagnostics.Debug.WriteLine($"IsThumbnailVisible {IsThumbnailVisible}");
         HasSession = snapshot.HasSession;
         if (!snapshot.HasSession) IsThumbnailVisible = false;
 

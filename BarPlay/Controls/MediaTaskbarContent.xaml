@@ -103,7 +103,7 @@
     <Button
         x:Uid="MediaInfoButton"
         Margin="4"
-        Padding="4"
+        Padding="0"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"
         HorizontalContentAlignment="Stretch"
@@ -173,20 +173,19 @@
                                             <FontIcon
                                                 FontSize="32"
                                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                                Glyph="&#xE93C;"
-                                                Visibility="{x:Bind ViewModel.HasNoSession, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                                Glyph="&#xE93C;" />
                                             <Image
                                                 ImageFailed="{x:Bind ViewModel.OnThumbnailImageFailed}"
                                                 ImageOpened="{x:Bind ViewModel.OnThumbnailImageOpened}"
                                                 Source="{x:Bind ViewModel.Thumbnail, Mode=OneWay}"
                                                 Stretch="UniformToFill"
-                                                Visibility="{x:Bind ViewModel.IsThumbnailVisible, Mode=OneWay}" />
+                                                Visibility="{x:Bind ViewModel.IsThumbnailVisible, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
                                         </Grid>
                                     </Border>
                                 </Button>
                                 <StackPanel
                                     Grid.Column="1"
-                                    VerticalAlignment="Bottom"
+                                    VerticalAlignment="Center"
                                     Spacing="2">
                                     <TextBlock
                                         FontSize="18"
@@ -345,14 +344,13 @@
                             <FontIcon
                                 FontSize="18"
                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                Glyph="&#xE93C;"
-                                Visibility="{x:Bind ViewModel.HasNoSession, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                Glyph="&#xE93C;" />
                             <Image
                                 ImageFailed="{x:Bind ViewModel.OnThumbnailImageFailed}"
                                 ImageOpened="{x:Bind ViewModel.OnThumbnailImageOpened}"
                                 Source="{x:Bind ViewModel.Thumbnail, Mode=OneWay}"
                                 Stretch="UniformToFill"
-                                Visibility="{x:Bind ViewModel.IsThumbnailVisible, Mode=OneWay}" />
+                                Visibility="{x:Bind ViewModel.IsThumbnailVisible, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
                         </Grid>
                     </Border>
                 </Button>
