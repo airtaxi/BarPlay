@@ -197,7 +197,8 @@
                                         FontSize="12"
                                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                         Text="{x:Bind ViewModel.Description, Mode=OneWay}"
-                                        TextTrimming="CharacterEllipsis" />
+                                        TextTrimming="CharacterEllipsis"
+                                        Visibility="{x:Bind ViewModel.HasDescription, Mode=OneWay}" />
                                 </StackPanel>
                             </Grid>
 
@@ -373,7 +374,8 @@
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                             Text="{x:Bind ViewModel.Description, Mode=OneWay}"
                             TextLineBounds="Tight"
-                            TextTrimming="CharacterEllipsis" />
+                            TextTrimming="CharacterEllipsis"
+                            Visibility="{x:Bind ViewModel.HasDescription, Mode=OneWay}" />
                     </StackPanel>
                     <!--  Empty state  -->
                     <TextBlock

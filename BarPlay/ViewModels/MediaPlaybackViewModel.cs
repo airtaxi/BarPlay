@@ -38,7 +38,10 @@ public sealed partial class MediaPlaybackViewModel : ObservableObject, IDisposab
     public partial string Title { get; set; } = string.Empty;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasDescription))]
     public partial string Description { get; set; } = string.Empty;
+
+    public bool HasDescription => !string.IsNullOrWhiteSpace(Description);
 
     [ObservableProperty]
     public partial ImageSource? Thumbnail { get; set; }
