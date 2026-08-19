@@ -175,7 +175,12 @@
                                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                                 Glyph="&#xE93C;"
                                                 Visibility="{x:Bind ViewModel.HasNoSession, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
-                                            <Image Source="{x:Bind ViewModel.Thumbnail, Mode=OneWay}" Stretch="UniformToFill" />
+                                            <Image
+                                                ImageFailed="{x:Bind ViewModel.OnThumbnailImageFailed}"
+                                                ImageOpened="{x:Bind ViewModel.OnThumbnailImageOpened}"
+                                                Source="{x:Bind ViewModel.Thumbnail, Mode=OneWay}"
+                                                Stretch="UniformToFill"
+                                                Visibility="{x:Bind ViewModel.IsThumbnailVisible, Mode=OneWay}" />
                                         </Grid>
                                     </Border>
                                 </Button>
@@ -341,7 +346,12 @@
                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                 Glyph="&#xE93C;"
                                 Visibility="{x:Bind ViewModel.HasNoSession, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
-                            <Image Source="{x:Bind ViewModel.Thumbnail, Mode=OneWay}" Stretch="UniformToFill" />
+                            <Image
+                                ImageFailed="{x:Bind ViewModel.OnThumbnailImageFailed}"
+                                ImageOpened="{x:Bind ViewModel.OnThumbnailImageOpened}"
+                                Source="{x:Bind ViewModel.Thumbnail, Mode=OneWay}"
+                                Stretch="UniformToFill"
+                                Visibility="{x:Bind ViewModel.IsThumbnailVisible, Mode=OneWay}" />
                         </Grid>
                     </Border>
                 </Button>

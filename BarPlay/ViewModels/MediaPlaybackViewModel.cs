@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Deskband11Lib.Core;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 
@@ -41,6 +42,9 @@ public sealed partial class MediaPlaybackViewModel : ObservableObject, IDisposab
 
     [ObservableProperty]
     public partial ImageSource? Thumbnail { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsThumbnailVisible { get; set; }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasNoSession))]
@@ -209,12 +213,17 @@ public sealed partial class MediaPlaybackViewModel : ObservableObject, IDisposab
     [RelayCommand]
     private void Exit() => Environment.Exit(0);
 
+    public void OnThumbnailImageOpened(object sender, RoutedEventArgs e) => IsThumbnailVisible = true;
+
+    public void OnThumbnailImageFailed(object sender, ExceptionRoutedEventArgs e) => IsThumbnailVisible = false;
+
     private void OnStateChanged(MediaPlaybackSnapshot snapshot)
     {
         Title = snapshot.Title;
         Description = snapshot.Description;
         Thumbnail = snapshot.Thumbnail;
         HasSession = snapshot.HasSession;
+        if (!snapshot.HasSession) IsThumbnailVisible = false;
 
         if (_hasOptimisticToggle)
         {
