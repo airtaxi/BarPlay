@@ -23,12 +23,74 @@
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
         <Style x:Key="FlyoutTransportButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="CornerRadius" Value="8" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="Width" Value="36" />
             <Setter Property="Height" Value="36" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter
+                            x:Name="ContentPresenter"
+                            Padding="{TemplateBinding Padding}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            ContentTransitions="{TemplateBinding ContentTransitions}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SubtleFillColorSecondaryBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SubtleFillColorTertiaryBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextFillColorDisabledBrush}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </ContentPresenter>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style
+            x:Key="FlyoutAccentTransportButtonStyle"
+            BasedOn="{StaticResource AccentButtonStyle}"
+            TargetType="Button">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Width" Value="48" />
+            <Setter Property="Height" Value="48" />
+            <Setter Property="CornerRadius" Value="24" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
         <Style x:Key="ArtworkButtonStyle" TargetType="Button">
@@ -151,10 +213,12 @@
                         <!--  Normal state  -->
                         <StackPanel Spacing="12" Visibility="{x:Bind ViewModel.HasSession, Mode=OneWay}">
                             <!--  Album art + Title + Artist  -->
-                            <Grid ColumnSpacing="8">
+                            <Grid ColumnSpacing="12">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
+                                    <!--  SettingsButton  -->
+                                    <ColumnDefinition Width="28" />
                                 </Grid.ColumnDefinitions>
                                 <Button
                                     x:Uid="OpenSourceAppArtworkButton"
@@ -188,10 +252,12 @@
                                     VerticalAlignment="Center"
                                     Spacing="2">
                                     <TextBlock
-                                        FontSize="18"
+                                        FontSize="16"
                                         FontWeight="SemiBold"
+                                        MaxLines="2"
                                         Text="{x:Bind ViewModel.Title, Mode=OneWay}"
-                                        TextTrimming="CharacterEllipsis" />
+                                        TextTrimming="CharacterEllipsis"
+                                        TextWrapping="Wrap" />
                                     <TextBlock
                                         FontSize="12"
                                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
@@ -237,10 +303,10 @@
 
                             <!--  Transport buttons  -->
                             <StackPanel
-                                Margin="0,-24,0,0"
+                                Margin="0,-16,0,0"
                                 HorizontalAlignment="Center"
                                 Orientation="Horizontal"
-                                Spacing="4">
+                                Spacing="12">
 
                                 <!--  Previous  -->
                                 <Button
@@ -248,7 +314,7 @@
                                     Command="{x:Bind ViewModel.SkipPreviousCommand}"
                                     IsEnabled="{x:Bind ViewModel.CanSkipPrevious, Mode=OneWay}"
                                     Style="{StaticResource FlyoutTransportButtonStyle}">
-                                    <FontIcon FontSize="20" Glyph="&#xE76B;" />
+                                    <FontIcon FontSize="20" Glyph="&#xE892;" />
                                 </Button>
 
                                 <!--  Play / Pause  -->
@@ -257,7 +323,7 @@
                                     x:Uid="PlayPauseButton"
                                     Command="{x:Bind ViewModel.TogglePlayPauseCommand}"
                                     IsEnabled="{x:Bind ViewModel.CanPlayPause, Mode=OneWay}"
-                                    Style="{StaticResource FlyoutTransportButtonStyle}">
+                                    Style="{StaticResource FlyoutAccentTransportButtonStyle}">
                                     <Grid>
                                         <FontIcon
                                             FontSize="20"
@@ -276,7 +342,7 @@
                                     Command="{x:Bind ViewModel.SkipNextCommand}"
                                     IsEnabled="{x:Bind ViewModel.CanSkipNext, Mode=OneWay}"
                                     Style="{StaticResource FlyoutTransportButtonStyle}">
-                                    <FontIcon FontSize="20" Glyph="&#xE76C;" />
+                                    <FontIcon FontSize="20" Glyph="&#xE893;" />
                                 </Button>
                             </StackPanel>
                         </StackPanel>
@@ -398,7 +464,7 @@
                     Command="{x:Bind ViewModel.SkipPreviousCommand}"
                     IsEnabled="{x:Bind ViewModel.CanSkipPrevious, Mode=OneWay}"
                     Style="{StaticResource TransportButtonStyle}">
-                    <FontIcon FontSize="16" Glyph="&#xE76B;" />
+                    <FontIcon FontSize="16" Glyph="&#xE892;" />
                 </Button>
 
                 <!--  Play / Pause  -->
@@ -425,7 +491,7 @@
                     Command="{x:Bind ViewModel.SkipNextCommand}"
                     IsEnabled="{x:Bind ViewModel.CanSkipNext, Mode=OneWay}"
                     Style="{StaticResource TransportButtonStyle}">
-                    <FontIcon FontSize="16" Glyph="&#xE76C;" />
+                    <FontIcon FontSize="16" Glyph="&#xE893;" />
                 </Button>
             </StackPanel>
         </Grid>
