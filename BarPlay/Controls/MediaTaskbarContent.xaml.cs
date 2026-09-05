@@ -13,6 +13,19 @@ namespace BarPlay.Controls;
 
 public sealed partial class MediaTaskbarContent : UserControl
 {
+    private const double CompactHeightThreshold = 48;
+    private const double DefaultArtworkButtonSize = 36;
+    private const double CompactArtworkButtonSize = 28;
+    private const double DefaultTitleFontSize = 12;
+    private const double CompactTitleFontSize = 11;
+    private const double DefaultDescriptionFontSize = 10;
+    private const double CompactDescriptionFontSize = 9;
+    private const double DefaultTitleDescriptionSpacing = 8;
+    private const double CompactTitleDescriptionSpacing = 6;
+
+    private static readonly Thickness s_defaultButtonMargin = new(4);
+    private static readonly Thickness s_compactButtonMargin = new(4, 0, 4, 0);
+
     public MediaPlaybackViewModel ViewModel { get; }
 
     private readonly ISettingsService _settingsService = App.Services.GetRequiredService<ISettingsService>();
@@ -28,6 +41,24 @@ public sealed partial class MediaTaskbarContent : UserControl
     {
         await ViewModel.InitializeAsync();
         AutoStartToggleMenuFlyoutItem.IsChecked = await ViewModel.StartupTaskService.IsEnabledAsync();
+    }
+
+    private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        if (sender is not UserControl usageControl) return;
+
+        var isCompact = usageControl.ActualHeight < CompactHeightThreshold;
+        MediaInfoButton.Margin = isCompact ? s_compactButtonMargin : s_defaultButtonMargin;
+
+        var artworkButtonSize = isCompact ? CompactArtworkButtonSize : DefaultArtworkButtonSize;
+        TaskbarArtworkButton.Width = artworkButtonSize;
+        TaskbarArtworkButton.Height = artworkButtonSize;
+        TaskbarArtworkBorder.Width = artworkButtonSize;
+        TaskbarArtworkBorder.Height = artworkButtonSize;
+
+        TaskbarTitleTextBlock.FontSize = isCompact ? CompactTitleFontSize : DefaultTitleFontSize;
+        TaskbarDescriptionTextBlock.FontSize = isCompact ? CompactDescriptionFontSize : DefaultDescriptionFontSize;
+        TaskbarTextStackPanel.Spacing = isCompact ? CompactTitleDescriptionSpacing : DefaultTitleDescriptionSpacing;
     }
 
     private void OnSeekSliderManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e) => ViewModel.BeginSeek();

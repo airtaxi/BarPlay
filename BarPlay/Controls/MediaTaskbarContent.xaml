@@ -10,6 +10,7 @@
     d:DesignHeight="48"
     d:DesignWidth="380"
     Loaded="OnLoaded"
+    SizeChanged="OnSizeChanged"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -163,6 +164,7 @@
     </UserControl.Resources>
 
     <Button
+        x:Name="MediaInfoButton"
         x:Uid="MediaInfoButton"
         Margin="4"
         Padding="0"
@@ -207,7 +209,6 @@
                             VerticalAlignment="Center"
                             FontSize="13"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            TextLineBounds="Tight"
                             Visibility="{x:Bind ViewModel.HasNoSession, Mode=OneWay}" />
 
                         <!--  Normal state  -->
@@ -291,14 +292,12 @@
                                     HorizontalAlignment="Left"
                                     FontSize="12"
                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                    Text="{x:Bind ViewModel.PositionText, Mode=OneWay}"
-                                    TextLineBounds="Tight" />
+                                    Text="{x:Bind ViewModel.PositionText, Mode=OneWay}" />
                                 <TextBlock
                                     HorizontalAlignment="Right"
                                     FontSize="12"
                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                    Text="{x:Bind ViewModel.EndTimeText, Mode=OneWay}"
-                                    TextLineBounds="Tight" />
+                                    Text="{x:Bind ViewModel.EndTimeText, Mode=OneWay}" />
                             </Grid>
 
                             <!--  Transport buttons  -->
@@ -394,6 +393,7 @@
                 </Grid.ColumnDefinitions>
                 <!--  Thumbnail  -->
                 <Button
+                    x:Name="TaskbarArtworkButton"
                     x:Uid="OpenSourceAppArtworkButton"
                     Grid.Column="0"
                     Width="36"
@@ -402,6 +402,7 @@
                     IsEnabled="{x:Bind ViewModel.HasSession, Mode=OneWay}"
                     Style="{StaticResource ArtworkButtonStyle}">
                     <Border
+                        x:Name="TaskbarArtworkBorder"
                         Width="36"
                         Height="36"
                         Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
@@ -427,13 +428,18 @@
                     VerticalAlignment="Center"
                     Spacing="0">
                     <!--  Normal: Title + Description  -->
-                    <StackPanel Spacing="8" Visibility="{x:Bind ViewModel.HasSession, Mode=OneWay}">
+                    <StackPanel
+                        x:Name="TaskbarTextStackPanel"
+                        Spacing="8"
+                        Visibility="{x:Bind ViewModel.HasSession, Mode=OneWay}">
                         <TextBlock
+                            x:Name="TaskbarTitleTextBlock"
                             FontSize="12"
                             Text="{x:Bind ViewModel.Title, Mode=OneWay}"
                             TextLineBounds="Tight"
                             TextTrimming="CharacterEllipsis" />
                         <TextBlock
+                            x:Name="TaskbarDescriptionTextBlock"
                             FontSize="10"
                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                             Text="{x:Bind ViewModel.Description, Mode=OneWay}"
