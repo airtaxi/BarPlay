@@ -166,7 +166,6 @@
     <Button
         x:Name="MediaInfoButton"
         x:Uid="MediaInfoButton"
-        Margin="4"
         Padding="0"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"
@@ -381,12 +380,16 @@
         </Button.Flyout>
 
         <Grid ColumnSpacing="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <!--  Button content: thumbnail + text  -->
-            <Grid ColumnSpacing="8">
+            <Grid Grid.Row="0" ColumnSpacing="8">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
@@ -459,6 +462,7 @@
 
             <!--  Transport buttons  -->
             <StackPanel
+                Grid.Row="0"
                 Grid.Column="1"
                 VerticalAlignment="Center"
                 Orientation="Horizontal"
@@ -500,6 +504,20 @@
                     <FontIcon FontSize="16" Glyph="&#xE893;" />
                 </Button>
             </StackPanel>
+
+            <!--  Playback progress  -->
+            <ProgressBar
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
+                Height="3"
+                HorizontalAlignment="Stretch"
+                Background="Transparent"
+                BorderThickness="0"
+                CornerRadius="0"
+                IsHitTestVisible="False"
+                Maximum="{x:Bind ViewModel.EndTimeTicks, Mode=OneWay}"
+                Visibility="{x:Bind ViewModel.HasTimeline, Mode=OneWay}"
+                Value="{x:Bind ViewModel.PositionTicks, Mode=OneWay}" />
         </Grid>
     </Button>
 </UserControl>

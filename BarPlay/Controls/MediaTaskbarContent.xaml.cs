@@ -23,9 +23,6 @@ public sealed partial class MediaTaskbarContent : UserControl
     private const double DefaultTitleDescriptionSpacing = 8;
     private const double CompactTitleDescriptionSpacing = 6;
 
-    private static readonly Thickness s_defaultButtonMargin = new(4);
-    private static readonly Thickness s_compactButtonMargin = new(4, 0, 4, 0);
-
     public MediaPlaybackViewModel ViewModel { get; }
 
     private readonly ISettingsService _settingsService = App.Services.GetRequiredService<ISettingsService>();
@@ -48,7 +45,6 @@ public sealed partial class MediaTaskbarContent : UserControl
         if (sender is not UserControl usageControl) return;
 
         var isCompact = usageControl.ActualHeight < CompactHeightThreshold;
-        MediaInfoButton.Margin = isCompact ? s_compactButtonMargin : s_defaultButtonMargin;
 
         var artworkButtonSize = isCompact ? CompactArtworkButtonSize : DefaultArtworkButtonSize;
         TaskbarArtworkButton.Width = artworkButtonSize;
